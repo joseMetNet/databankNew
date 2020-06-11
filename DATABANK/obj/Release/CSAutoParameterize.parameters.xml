@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <parameters>
   <parameter name="DefaultConnection-Web.config Connection String" description="DefaultConnection Cadena de conexión que usa la aplicación en web.config para obtener acceso a la base de datos." defaultValue="Data Source=asael.colombiahosting.com.co\MSSQLSERVER2014;AttachDbFilename=|DataDirectory|\aspnet-METNET-20190108050350.mdf;Initial Catalog=aspnet-METNET-20190108050350;Integrated Security=True" tags="SqlConnectionString">
-    <parameterEntry kind="XmlFile" scope="C:\\Users\\Admin\\OneDrive\\DATABANK2\\DATABANK\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DefaultConnection']/@connectionString" />
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\Admin\\Desktop\\GIT\\databankNew\\DATABANK\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DefaultConnection']/@connectionString" />
   </parameter>
   <parameter name="CustomerDataConnectionString-Web.config Connection String" description="CustomerDataConnectionString Cadena de conexión que usa la aplicación en web.config para obtener acceso a la base de datos." defaultValue="Data Source=metnetvizor.database.windows.net;Initial Catalog=databank;Persist Security Info=True;User ID=MetNetVizor;Password=13A132b17#;Connect Timeout=1200;" tags="SqlConnectionString">
-    <parameterEntry kind="XmlFile" scope="C:\\Users\\Admin\\OneDrive\\DATABANK2\\DATABANK\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='CustomerDataConnectionString']/@connectionString" />
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\Admin\\Desktop\\GIT\\databankNew\\DATABANK\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='CustomerDataConnectionString']/@connectionString" />
   </parameter>
 </parameters>

@@ -406,6 +406,7 @@ C:\Users\Admin\Desktop\GIT\databankNew\DATABANK\bin\es\System.Web.Razor.resource
 C:\Users\Admin\Desktop\GIT\databankNew\DATABANK\bin\es\System.Web.WebPages.resources.dll
 C:\Users\Admin\Desktop\GIT\databankNew\DATABANK\bin\es\System.Web.WebPages.Deployment.resources.dll
 C:\Users\Admin\Desktop\GIT\databankNew\DATABANK\bin\es\System.Web.WebPages.Razor.resources.dll
+C:\Users\Admin\Desktop\GIT\databankNew\DATABANK\obj\Debug\DATABANK.csprojAssemblyReference.cache
 C:\Users\Admin\Desktop\GIT\databankNew\DATABANK\obj\Debug\DATABANK.csproj.CoreCompileInputs.cache
 C:\Users\Admin\Desktop\GIT\databankNew\DATABANK\obj\Debug\DATABANK.csproj.CopyComplete
 C:\Users\Admin\Desktop\GIT\databankNew\DATABANK\obj\Debug\DATABANK.dll
