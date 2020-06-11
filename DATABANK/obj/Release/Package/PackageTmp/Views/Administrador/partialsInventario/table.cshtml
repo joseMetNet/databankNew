@@ -1,0 +1,228 @@
+﻿@{
+    ViewBag.Title = "empleados";
+    Layout = "~/Views/Shared/gestionView.cshtml";
+}
+<section class="section">
+    <h5 class="section-header">
+        Cargar Inventario
+    </h5>
+</section>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <form action="@Url.Action("SubirMateriales")" method="post" id="formsaveemployee" class="col-sm-12 row" enctype="multipart/form-data">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Proyecto <span class="text-danger">*</span></label>
+                            <select name="idProyecto" class="form-control selectcount" required style="width:100%">
+                                <option></option>
+                                @foreach (var proyecto in ViewBag.ListaProyecto)
+                                {
+                                    <option value="@proyecto["idProyecto"]">@proyecto["NombreProyecto"]</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <br>
+                            <div class="wow fadeIn">
+                                <label>Archivo<span class="text-danger">*</span></label>
+                                <input type="file" name="FileName" required class="form-control form-control-sm" >
+                                <input type="hidden" name="fileDoc[]" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <br><br>
+                            <input type="submit" value="Cargar Materiales" class="btn btn-info" style="background-color:#01abe8;border-color:#01abe8">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-12 text-right">
+                <a href="~/Content/images/Plantilla.xlsx" class="btn btn-info" title="Descargar Plantilla" style="background-color:#94999c;border-color:#94999c" target="_blank">Descargar Plantilla</a>
+            </div>
+            <div class="col-sm-12">
+                <br />
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                @if (ViewBag.ListaErrores.Count > 0)
+                {
+                    <table class="table table-striped 1">
+                        <thead>
+                            <tr style="background-color:#434343; color:white;">
+                                <th class="text-center">Bodega</th>
+                                <th class="text-center">Centro</th>
+                                <th class="text-center">Ubicación</th>
+                                <th class="text-center">Código</th>
+                                <th class="text-center">Serial</th>
+                                <th class="text-center">UM</th>
+                                <th class="text-center">Descripción</th>
+                                <th class="text-center">QTY</th>
+                                <th class="text-center">Precio</th>
+                                <th class="text-center">Rura</th>
+                                <th class="text-center">Operario</th>
+                                <th class="text-center">Conteo</th>
+                                <th class="text-center">Corte</th>
+                                <th class="text-center">Linea</th>
+                                <th class="text-center">Observación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var error in ViewBag.ListaErrores)
+                            {
+                                <tr style="background-color:antiquewhite">
+                                    <td class="text-center">@error["NombreBodega"]</td>
+                                    <td class="text-center">@error["Centro"]</td>
+                                    <td class="text-center">@error["Ubicacion"]</td>
+                                    <td class="text-center">@error["Codigo"]</td>
+                                    <td class="text-center">@error["Serial"]</td>
+                                    <td class="text-center">@error["UnidadMedida"]</td>
+                                    <td class="text-center">@error["Descripcion"]</td>
+                                    <td class="text-center">@error["QTY"]</td>
+                                    <td class="text-center">@error["Precio"]</td>
+                                    <td class="text-center">@error["Ruta"]</td>
+                                    <td class="text-center">@error["Nombre"] - @error["Apellido"]</td>
+                                    <td class="text-center">@error["Conteo"]</td>
+                                    <td class="text-center">@error["Corte"].ToString("yyyy-MM-dd")</td>
+                                    <td class="text-center">@error["Linea"]</td>
+                                    <td class="text-center">@error["Observacion"]</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    if (ViewBag.ListaMateriales.Count > 0)
+                    {
+                        <table class="table table-striped filtros">
+                            <thead>
+                                <tr style="background-color:#434343; color:white;">
+                                    <th class="text-center">Bodega</th>
+                                    <th class="text-center">Centro</th>
+                                    <th class="text-center">Ubicación</th>
+                                    <th class="text-center">Código</th>
+                                    <th class="text-center">Serial</th>
+                                    <th class="text-center">UM</th>
+                                    <th class="text-center">Descripción</th>
+                                    <th class="text-center">QTY</th>
+                                    <th class="text-center">Precio</th>
+                                    <th class="text-center">Rura</th>
+                                    <th class="text-center">Operario</th>
+                                    <th class="text-center">Conteo</th>
+                                    <th class="text-center">Corte</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var materiales in ViewBag.ListaMateriales)
+                                {
+                                    <tr>
+                                        <td class="text-center">@materiales["NombreBodega"]</td>
+                                        <td class="text-center">@materiales["Centro"]</td>
+                                        <td class="text-center">@materiales["Ubicacion"]</td>
+                                        <td class="text-center">@materiales["Codigo"]</td>
+                                        <td class="text-center">@materiales["Serial"]</td>
+                                        <td class="text-center">@materiales["UnidadMedida"]</td>
+                                        <td class="text-center">@materiales["Descripcion"]</td>
+                                        <td class="text-center">@materiales["QTY"]</td>
+                                        <td class="text-center">@materiales["Precio"]</td>
+                                        <td class="text-center">@materiales["Ruta"]</td>
+                                        <td class="text-center">@materiales["Nombre"] - @materiales["Apellido"]</td>
+                                        <td class="text-center">@materiales["Conteo"]</td>
+                                        <td class="text-center">@materiales["Corte"].ToString("yyyy-MM-dd")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <table class="table table-striped filtros">
+                            <thead>
+                                <tr style="background-color:#434343; color:white;">
+                                    <th class="text-center">Bodega</th>
+                                    <th class="text-center">Centro</th>
+                                    <th class="text-center">Ubicación</th>
+                                    <th class="text-center">Código</th>
+                                    <th class="text-center">Serial</th>
+                                    <th class="text-center">UM</th>
+                                    <th class="text-center">Descripción</th>
+                                    <th class="text-center">QTY</th>
+                                    <th class="text-center">Precio</th>
+                                    <th class="text-center">Rura</th>
+                                    <th class="text-center">Operario</th>
+                                    <th class="text-center">Conteo</th>
+                                    <th class="text-center">Corte</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-center"></td>
+                                    <td class="text-center"></td>
+                                    <td class="text-center"></td>
+                                    <td class="text-center"></td>
+                                    <td class="text-center"></td>
+                                    <td class="text-center"></td>
+                                    <td class="text-center"></td>
+                                    <td class="text-center"></td>
+                                    <td class="text-center"></td>
+                                    <td class="text-center"></td>
+                                    <td class="text-center"></td>
+                                    <td class="text-center"></td>
+                                    <td class="text-center"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    }
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    @if (TempData["message"] != null)
+    {
+        <script type="text/javascript">
+            Swal.fire({
+                type: '@TempData["type"]',
+                title: '@TempData["title"]',
+                html: '@TempData["message"]',
+                showConfirmButton: false,
+                width: 300,
+                High: 300,
+                timer: 3000
+            })
+        </script>
+    }
+    <script type="text/javascript">
+        $(".filtros").DataTable({
+            "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
+            destroy: true,
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json'
+            }
+        });
+        $(".1").DataTable({
+            "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
+            destroy: true,
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json'
+            }
+        });
+        $(".selectcount").select2({
+            placeholder: "Seleccionar",
+            allowClear: true
+        })
+    </script>
+}

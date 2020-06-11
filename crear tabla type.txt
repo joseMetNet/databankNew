@@ -1,0 +1,37 @@
+drop type TemporalCargaMateriales
+
+CREATE TYPE dbo.TemporalCargaMateriales AS TABLE
+(idProyecto INT NOT NULL
+,idBodega INT NOT NULL
+,Centro VARCHAR(50) NOT NULL
+,Ubicacion VARCHAR(50) NOT NULL
+,Codigo VARCHAR(50) NOT NULL
+,Serial VARCHAR(50) NOT NULL
+,idUnidadMedida INT NOT NULL
+,Descripcion VARCHAR(MAX) NOT NULL
+,QTY INT NOT NULL
+,Precio VARCHAR(50) NOT NULL
+,Ruta  INT NOT NULL
+,idOperario INT NOT NULL
+,Conteo  INT NOT NULL
+,Corte VARCHAR(50) NOT NULL)
+
+
+
+CREATE TYPE dbo.TemporalErrores AS TABLE
+(idProyecto INT NOT NULL
+,idBodega INT NOT NULL
+,Centro VARCHAR(50) NOT NULL
+,Ubicacion VARCHAR(50) NOT NULL
+,Codigo VARCHAR(50) NOT NULL
+,Serial VARCHAR(50) NOT NULL
+,idUnidadMedida INT NOT NULL
+,Descripcion VARCHAR(MAX) NOT NULL
+,QTY INT NOT NULL
+,Precio VARCHAR(50) NOT NULL
+,Ruta  INT NOT NULL
+,idOperario INT NOT NULL
+,Conteo  INT NOT NULL
+,Corte VARCHAR(50) NOT NULL
+,Linea int not null
+,Observacion VARCHAR(max) NOT NULL)

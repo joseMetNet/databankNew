@@ -1,0 +1,148 @@
+﻿@{
+    ViewBag.Title = "empleados";
+    Layout = "~/Views/Shared/gestionView.cshtml";
+}
+<section class="section">
+    <h5 class="section-header">
+        Lista Bodegas
+    </h5>
+</section>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-12 text-right">
+                <a href="@Url.Action("createBodega")" class="btn btn-danger" style="background-color:#01abe8;border-color:#01abe8">Nueva Bodega</a>
+            </div>
+            <div class="col-sm-12">
+                <br />
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped filtros">
+                    <thead>
+                        <tr style="background-color:#434343; color:white;">
+                            <th>Bodega</th>
+                            <th>Codigo</th>
+                            <th>Estado</th>
+                            <th class="text-center" style="width:15%">Operación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var bodega in ViewBag.bodega)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="mr-3">
+                                            <a href="#">
+                                                <img src="@bodega["imagen"]" class="rounded-circle" width="32" height="32" alt="">
+                                            </a>
+                                        </div>
+                                        <div>
+                                            <a class="text-default font-weight-semibold text-uppercase">
+                                                @bodega["nombreBodega"] 
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>@bodega["codigo"]</td>
+                                <td>@bodega["Estado"]</td>
+                                <td class="p-1 text-center">
+                                    <a data-href="@Url.Action("editBodega", new { @id=bodega["idBodega"]})" class="btn btn-danger btn-action mr-1 editUser" title="Editar Bodega" style="background-color:#01abe8;border-color:#01abe8"><i class="fa fa-edit"></i></a>
+                                    @if (Convert.ToInt32(@bodega["idEstado"]) == 1)
+                                    {
+                                        <a class="btn btn-danger btn-action deActivateBodega" data-user="@bodega["idBodega"]" data-status="@bodega["idEstado"]" data-text="de desactivar esta bodega" style="background-color:#94999c;border-color:#94999c"><i class="fa fa-power-off" ></i></a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-success btn-action deActivateBodega" data-user="@bodega["idBodega"]" data-status="@bodega["idEstado"]" data-text="de activar esta bodega"><i class="fa fa-check"></i></a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    @if (TempData["message"] != null)
+    {
+        <script type="text/javascript">
+            Swal.fire({
+                type: '@TempData["type"]',
+                title: '@TempData["title"]',
+                html: '@TempData["message"]',
+                showConfirmButton: false,
+                width: 300,
+                High: 300,
+                timer: 3000
+            })
+        </script>
+    }
+    <script type="text/javascript">
+        $(".filtros").DataTable({
+            "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
+            destroy: true,
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json'
+            }
+        });
+        $(document).on("click", ".editUser", function () {
+            var asd = $(this).data("href");
+            Swal.fire({
+                title: "¿Está seguro de editar esta bodega?",
+                type: 'question',
+                showCancelButton: true,
+                showConfirmButton: true,
+                confirmButtonColor: '#01abe8',
+                cancelButtonColor: '#94999c',
+                confirmButtonText: 'Aceptar',
+                cancelButtonText: 'Cancelar',
+                width: 330,
+                High: 330,
+            }).then((result) => {
+                if (result.value) {
+                    location.replace(asd)
+                }
+            });
+        });
+        $(document).on("click", ".deActivateBodega", function () {
+            var jas = $(this).data("user")
+            var okk = $(this).data("text")
+            var aaa = $(this).data("status")
+            Swal.fire({
+                title: "¿Está Seguro?",
+                html: okk,
+                type: 'question',
+                showCancelButton: true,
+                showConfirmButton: true,
+                confirmButtonColor: '#01abe8',
+                cancelButtonColor: '#94999c',
+                confirmButtonText: 'Aceptar',
+                width: 330,
+                High: 330,
+            }).then((result) => {
+                if (result.value) {
+                    $.get("/administrador/deActivateBodega/" + jas + "/" + aaa, function (data) {
+                        if (data.result == 1) {
+                            Swal.fire({
+                                type: 'success',
+                                title: "Bodega modificada con éxito. ",
+                                showConfirmButton: true,
+                                confirmButtonColor: '#01abe8',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Aceptar',
+                                cancelButtonText: 'Cancelar',
+                            });
+                        }
+                        location.reload();
+                    });
+                }
+            });
+        });
+    </script>
+}
+

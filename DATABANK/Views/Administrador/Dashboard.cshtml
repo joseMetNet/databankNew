@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/gestionView.cshtml";
+}
+
+<section class="section">
+    <h5 class="section-header">
+        Dashboard
+    </h5>
+    
+</section>
+
+@section scripts{
+
+    @if (TempData["message"] != null)
+    {
+        <script type="text/javascript">
+            Swal.fire({
+              type: '@TempData["type"]',
+              title: '@TempData["title"]',
+              html: '@TempData["message"]',
+            })
+        </script>
+        @TempData.Remove("type");
+        @TempData.Remove("title");
+        @TempData.Remove("message");
+    }
+
+}
