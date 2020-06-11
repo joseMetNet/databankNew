@@ -5,216 +5,246 @@
 }
 
 
-<form action="@Url.Action("saveInspeccion",new { @id=@ViewBag.Producto["idProducto"]}))" method="post" id="formsaveemployee" class="col-sm-12 row" enctype="multipart/form-data">
-    <br />
-    <div class="card">
-        <div class="card-header">
-            <div class="col-sm-12">
-                <h3 class="text-center">Ruta de Inspección</h3>
+    <form action="@Url.Action("saveInspeccion",new {idProyecto=@ViewBag.Producto["idProyecto"]})" method="post" id="formsaveemployee" class="col-sm-12 row" enctype="multipart/form-data">
+        <br />
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="col-sm-12">
+                            <h3 class="text-center">Inventario Inicial</h3>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <input type="hidden" name="idProducto" value="@ViewBag.Producto["idProducto"]" />
+                            <input type="hidden" name="idBodega" value="@ViewBag.Producto["idBodega"]" />
+                            <br>
+                            <br>
+                            <div class="col-sm-12">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Bodega <span class="text-danger">*</span></label>
+                                            <select name="idBodega" class="form-control selectcount este" style="width:100%" disabled>
+                                                <option></option>
+                                                @foreach (var bodega in ViewBag.ListaBodega)
+                                                {
+                                                    if (Convert.ToInt32(ViewBag.producto["idBodega"]) == bodega["idBodega"])
+                                                    {
+                                                        <option selected value="@bodega["idBodega"]">@bodega["NombreBodega"]</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@bodega["idBodega"]">@bodega["NombreBodega"]</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Codigo<span class="text-danger">*</span></label>
+                                            <input type="text" name="codigo" class="form-control form-control-sm" value="@ViewBag.producto["codigo"]" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Nombre Material<span class="text-danger">*</span></label>
+                                            <input type="text" name="nombreProducto" class="form-control form-control-sm" value="@ViewBag.producto["Descripcion"]" readonly>
+                                        </div>
+                                    </div>
+                                    @if (Convert.ToInt32(Session["idPerfil"]) == 1)
+                                    {
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label>Cantidad<span class="text-danger">*</span></label>
+                                                <input type="text" name="Cantidad" class="form-control form-control-sm" value="@ViewBag.producto["QTY"]" readonly>
+                                            </div>
+                                        </div>
+                                    }
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Unidad Medida <span class="text-danger">*</span></label>
+                                            <select name="idUnidadMedida" class="form-control selectcount este" disabled style="width:100%">
+                                                <option></option>
+                                                @foreach (var unidad in ViewBag.ListaUnidadMedida)
+                                                {
+                                                    if (Convert.ToInt32(ViewBag.producto["idUnidadMedida"]) == unidad["idUnidadMedida"])
+                                                    {
+                                                        <option selected value="@unidad["idUnidadMedida"]">@unidad["UnidadMedida"]</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@unidad["idUnidadMedida"]">@unidad["UnidadMedida"]</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Ubicación<span class="text-danger">*</span></label>
+                                            <input type="text" name="Ubicacion" class="form-control form-control-sm" value="@ViewBag.producto["Ubicacion"]" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label>Descripción<span class="text-danger">*</span></label>
+                                            <textarea name="descripcion" class="form-control form-control-sm" readonly>@ViewBag.producto["descripcion"]</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="col-sm-12">
+                            <h3 class="text-center">Crear Inspección</h3>
+                        </div>
+                        @*<br />
+                        <div class="col-sm-12 row">
+                            <small class="text-danger">Los campos con asteriscos son obligatorios.</small>
+                        </div>*@
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <br>
+                            <br>
+                            <div class="col-sm-12">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label>Observacion<span class="text-danger">*</span></label>
+                                            <textarea name="Observacion" class="form-control form-control-sm" required></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label>Ubicación Auxiliar</label>
+                                            <input type="text" name="ubicacionAuxiliar" class="form-control form-control-sm">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label>Estado <span class="text-danger">*</span></label>
+                                            <select name="idEstado" class="form-control selectcount" id="estado" required style="width:100%">
+                                                <option></option>
+                                                @foreach (var estado in ViewBag.ListaEstado)
+                                                {
+                                                    <option value="@estado["idEstado"]">@estado["estado"]</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4 categoria d-none">
+                                        <div class="form-group">
+                                            <label>Categoria</label>
+                                            <select name="idCategoria" class="form-control selectcount" style="width:100%">
+                                                <option></option>
+                                                @foreach (var categoria in ViewBag.ListaCategoria)
+                                                {
+                                                    <option value="@categoria["idCategoria"]">@categoria["Categoria"]</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label>Conteo<span class="text-danger">*</span></label>
+                                            <input type="text" name="conteo" id="numero" class="form-control form-control-sm" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12" id="contenerimg">
+                                        <div class="col-md-4 align-self-center">
+                                            <div class="wow fadeIn">
+                                                <h5 id="addimagebutton" class="curpointer"><strong><i class="fa fa-plus"></i>Imagen</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 text-center">
+                                        <br><br>
+                                        <div class="row">
+                                            <div class="col-sm-6 text-right">
+                                                <div class="form-group">
+                                                    <a href="@Url.Action("ListaMaterialesInspeccion")" class="btn btn-secondary" style="background-color:#94999c;border-color:#94999c">Cancelar</a>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6 text-left">
+                                                <div class="form-group">
+                                                    <input type="submit" value="Siguiente Inspección" class="btn btn-danger" style="background-color:#01abe8;border-color:#01abe8">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="card-body">
-            <div class="row">
+        <div class="card">
+            <div class="card-header">
                 <div class="col-sm-12">
-                    <div class="row">
-                        <div class="card-body p-0">
-                            <div class="table-responsive">
-                                <table class="table table-striped filtros">
-                                    <thead>
-                                        <tr style="background-color:#434343; color:white;">
-                                            <th class="text-center" style="width:200px">Producto</th>
-                                            <th class="text-center" style="width:200px">Ubicación</th>
-                                            <th class="text-center" style="width:200px">Fecha Inventario</th>
-                                            <th class="text-center" style="width:200px">Operario Asignado</th>
-                                            <th class="text-center" style="width:200px">Estado</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var ruta in ViewBag.ListaRuta)
-                                        {
-                                            <tr>
-                                                <td class="text-center">@ruta["Descripcion"]</td>
-                                                <td class="text-center">
-                                                    @ruta["NombreBodega"] - @ruta["Ubicacion"]
-                                                </td>
-                                                <td class="text-center">@ruta["FechaCreacion"].ToString("yyyy-MM-dd")</td>
-                                                <td class="text-center">@ruta["Usuario"]</td>
-                                                <td class="text-center">@ruta["EstadoInspeccion"]</td>
+                    <h3 class="text-center">Ruta de Inspección</h3>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-striped filtros">
+                                        <thead>
+                                            <tr style="background-color:#434343; color:white;">
+                                                <th class="text-center" style="width:200px">Producto</th>
+                                                <th class="text-center" style="width:200px">Ubicación</th>
+                                                <th class="text-center" style="width:200px">Fecha Inventario</th>
+                                                <th class="text-center" style="width:200px">Operario Asignado</th>
+                                                <th class="text-center" style="width:200px">Estado</th>
                                             </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-header">
-            <div class="col-sm-12">
-                <h3 class="text-center">Inventario Inicial</h3>
-            </div>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <input type="hidden" name="idProducto" value="@ViewBag.Producto["idProducto"]" />
-                <input type="hidden" name="idBodega" value="@ViewBag.Producto["idBodega"]" />
-                <br>
-                <br>
-                <div class="col-sm-12">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label>Bodega <span class="text-danger">*</span></label>
-                                <select name="idBodega" class="form-control selectcount este" style="width:100%" disabled>
-                                    <option></option>
-                                    @foreach (var bodega in ViewBag.ListaBodega)
-                                    {
-                                        if (Convert.ToInt32(ViewBag.producto["idBodega"]) == bodega["idBodega"])
-                                        {
-                                            <option selected value="@bodega["idBodega"]">@bodega["NombreBodega"]</option>
-                                        }
-                                        else
-                                        {
-                                            <option value="@bodega["idBodega"]">@bodega["NombreBodega"]</option>
-                                        }
-                                    }
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label>Codigo<span class="text-danger">*</span></label>
-                                <input type="text" name="codigo" class="form-control form-control-sm" value="@ViewBag.producto["codigo"]" readonly>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label>Nombre Material<span class="text-danger">*</span></label>
-                                <input type="text" name="nombreProducto" class="form-control form-control-sm" value="@ViewBag.producto["Descripcion"]" readonly>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label>Cantidad<span class="text-danger">*</span></label>
-                                <input type="text" name="Cantidad" class="form-control form-control-sm" value="@ViewBag.producto["QTY"]" readonly>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label>Unidad Medida <span class="text-danger">*</span></label>
-                                <select name="idUnidadMedida" class="form-control selectcount este" disabled style="width:100%">
-                                    <option></option>
-                                    @foreach (var unidad in ViewBag.ListaUnidadMedida)
-                                    {
-                                        if (Convert.ToInt32(ViewBag.producto["idUnidadMedida"]) == unidad["idUnidadMedida"])
-                                        {
-                                            <option selected value="@unidad["idUnidadMedida"]">@unidad["UnidadMedida"]</option>
-                                        }
-                                        else
-                                        {
-                                            <option value="@unidad["idUnidadMedida"]">@unidad["UnidadMedida"]</option>
-                                        }
-                                    }
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label>Ubicación<span class="text-danger">*</span></label>
-                                <input type="text" name="Ubicacion" class="form-control form-control-sm" value="@ViewBag.producto["Ubicacion"]" readonly>
-                            </div>
-                        </div>
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label>Descripción<span class="text-danger">*</span></label>
-                                <textarea name="descripcion" class="form-control form-control-sm" readonly>@ViewBag.producto["descripcion"]</textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-header">
-            <div class="col-sm-12">
-                <h3 class="text-center">Crear Inspección</h3>
-            </div>
-            <br />
-            <div class="col-sm-12 row">
-                <small class="text-danger">Los campos con asteriscos son obligatorios.</small>
-            </div>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <br>
-                <br>
-                <div class="col-sm-12">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label>Observacion<span class="text-danger">*</span></label>
-                                <textarea name="Observacion" class="form-control form-control-sm" required></textarea>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label>Ubicación Auxiliar</label>
-                                <input type="text" name="ubicacionAuxiliar" class="form-control form-control-sm">
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label>Estado <span class="text-danger">*</span></label>
-                                <select name="idEstado" class="form-control selectcount" id="estado" required style="width:100%">
-                                    <option></option>
-                                    @foreach (var estado in ViewBag.ListaEstado)
-                                    {
-                                        <option value="@estado["idEstado"]">@estado["estado"]</option>
-                                    }
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-4 categoria d-none">
-                            <div class="form-group">
-                                <label>Categoria</label>
-                                <select name="idCategoria" class="form-control selectcount" style="width:100%">
-                                    <option></option>
-                                    @foreach (var categoria in ViewBag.ListaCategoria)
-                                    {
-                                        <option value="@categoria["idCategoria"]">@categoria["Categoria"]</option>
-                                    }
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label>Conteo<span class="text-danger">*</span></label>
-                                <input type="text" name="conteo" class="form-control form-control-sm" required>
-                            </div>
-                        </div>
-                        <div class="col-sm-12" id="contenerimg">
-                            <div class="col-md-2 align-self-center">
-                                <div class="wow fadeIn">
-                                    <h5 id="addimagebutton" class="curpointer"><strong><i class="fa fa-plus"></i>Imagen</strong></h5>
-                                </div><!-- end media -->
-                            </div>
-                        </div>
-                        <div class="col-sm-12 text-center">
-                            <br><br>
-                            <div class="row">
-                                <div class="col-sm-6 text-right">
-                                    <div class="form-group">
-                                        <a href="@Url.Action("ListaMaterialesInspeccion")" class="btn btn-secondary" style="background-color:#94999c;border-color:#94999c">Cancelar</a>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 text-left">
-                                    <div class="form-group">
-                                        <input type="submit" value="Siguiente Inspección" class="btn btn-danger" style="background-color:#01abe8;border-color:#01abe8"> 
-                                    </div>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var ruta in ViewBag.ListaRuta)
+                                            {
+                                                <tr>
+                                                    <td class="text-center">@ruta["Descripcion"]</td>
+                                                    <td class="text-center">
+                                                        @ruta["NombreBodega"] - @ruta["Ubicacion"]
+                                                    </td>
+                                                    <td class="text-center">@ruta["FechaCreacion"].ToString("yyyy-MM-dd")</td>
+                                                    <td class="text-center">@ruta["Usuario"]</td>
+                                                    <td class="text-center">
+                                                        @if (@ruta["EstadoInspeccion"].ToString() == "Terminado")
+                                                        {
+                                                            if (ruta["CantidadInventario"] == ruta["QTY"])
+                                                            {
+                                                                <a data-href="#" class="btn btn-sm btn-success" style="width: 25px; height: 25px;-moz-border-radius: 50%; -webkit-border-radius: 50%;border-radius: 50%;" />
+                                                            }
+                                                            else if (ruta["CantidadInventario"] < ruta["QTY"])
+                                                            {
+                                                                <a data-href="#" class="btn btn-sm btn-danger" style="width: 25px; height: 25px;-moz-border-radius: 50%; -webkit-border-radius: 50%;border-radius: 50%;" />
+                                                            }
+                                                            else if (ruta["CantidadInventario"] > ruta["QTY"])
+                                                            {
+                                                                <a data-href="#" class="btn btn-sm btn-dark" style="width: 25px; height: 25px;-moz-border-radius: 50%; -webkit-border-radius: 50%;border-radius: 50%;background-color:#F7FE2E;border-color:#F7FE2E" />
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            @ruta["EstadoInspeccion"]
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -222,8 +252,7 @@
                 </div>
             </div>
         </div>
-    </div>
-</form>
+    </form>
 @section scripts{
     @if (TempData["message"] != null)
     {
@@ -262,15 +291,15 @@
         });
         $('#addimagebutton').click(function () {
             var ranos = "nada" + Math.floor(Math.random() * 1000)
-            var htmls = "<div class=\"col-md-2\">";
+            var htmls = "<div class=\"col-md-4\">";
             htmls += "<div class=\"wow fadeIn\">";
             htmls += "<h5><strong>Imagen</strong>&nbsp;&nbsp;&nbsp;<i class=\"fa fa-minus-circle menusbut curpointer\"></i></h5>";
             htmls += '<img src="#" alt="" id="' + ranos + '" class="img-responsive img-rounded" width="100"  height="100">';
             htmls += "</div>"
             htmls += "<div class=\"row\">";
-            htmls += "<div class=\"col-md-12 mb-3\">";
+            htmls += "<div class=\"col-md-12\">";
             htmls += "<label></label>";
-            htmls += "<div class=\"input-group input-group-lg\">";
+            htmls += "<div class=\"input-group input-group-sm\">";
             htmls += "<div class=\"input-group-prepend\">";
             htmls += "<label class=\"custom-file-label\" for=\"customFile\">Buscar</label>";
             htmls += "</div>";
@@ -282,12 +311,18 @@
             htmls += "</div>";
             $("#contenerimg").append(htmls);
         });
+        $(document).on("click", ".menusbut", function () {
+            $(this).parent().parent().parent().remove();
+        })
         $(".filtros").DataTable({
             "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
             destroy: true,
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json'
             }
+        });
+        $('#numero').on('input', function () {
+            this.value = this.value.replace(/[^0-9]/g, '');
         });
     </script>
 }

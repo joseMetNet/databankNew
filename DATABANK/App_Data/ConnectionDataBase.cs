@@ -189,7 +189,7 @@ namespace DATABANK.App_Data
                     string sas = e.Message; throw;
                 }
             }
-            public DataTable saveUsuarioUpdate(DATABANK.Models.usuarios model,  Byte[] pKEY, Byte[] pIV)
+            public DataTable saveUsuarioUpdate(DATABANK.Models.usuarios model, Byte[] pKEY, Byte[] pIV)
             {
                 try
                 {
@@ -284,7 +284,7 @@ namespace DATABANK.App_Data
                     string sas = e.Message; throw;
                 }
             }
-            public DataTable getProyectoBodega(int pidProyecto = 0,int pidUsuario = 0)
+            public DataTable getProyectoBodega(int pidProyecto = 0, int pidUsuario = 0)
             {
                 try
                 {
@@ -310,6 +310,26 @@ namespace DATABANK.App_Data
                 {
                     SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["CustomerDataConnectionString"].ConnectionString);
                     SqlDataAdapter da = new SqlDataAdapter("SP_getListaInspección", con);
+                    da.SelectCommand.Parameters.Add("@pidUsuario", SqlDbType.Int).Value = pidUsuario;
+                    da.SelectCommand.Parameters.Add("@pidProyecto", SqlDbType.Int).Value = pidProyecto;
+                    da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    return dt;
+
+                }
+                catch (Exception e)
+                {
+
+                    string sas = e.Message; throw;
+                }
+            }
+            public DataTable getConteoInspeccion(int pidProyecto = 0, int pidUsuario = 0)
+            {
+                try
+                {
+                    SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["CustomerDataConnectionString"].ConnectionString);
+                    SqlDataAdapter da = new SqlDataAdapter("SP_getConteoInspeccion", con);
                     da.SelectCommand.Parameters.Add("@pidUsuario", SqlDbType.Int).Value = pidUsuario;
                     da.SelectCommand.Parameters.Add("@pidProyecto", SqlDbType.Int).Value = pidProyecto;
                     da.SelectCommand.CommandType = CommandType.StoredProcedure;
@@ -410,6 +430,8 @@ namespace DATABANK.App_Data
                     da.SelectCommand.Parameters.Add("@pcodigo", SqlDbType.VarChar).Value = model.codigo;
                     da.SelectCommand.Parameters.Add("@pidEstado", SqlDbType.Int).Value = 1;
                     da.SelectCommand.Parameters.Add("@pidProyecto", SqlDbType.Int).Value = model.idProyecto;
+                    da.SelectCommand.Parameters.Add("@pidDepartamento", SqlDbType.Int).Value = model.idDepartamento;
+                    da.SelectCommand.Parameters.Add("@pidMunicipio", SqlDbType.Int).Value = model.idMunicipio;
                     da.SelectCommand.CommandType = CommandType.StoredProcedure;
                     DataTable dt = new DataTable();
                     da.Fill(dt);
@@ -450,7 +472,7 @@ namespace DATABANK.App_Data
                 }
             }
 
-            public DataTable saveUsuarioMaterial(int pidProyecto,int pidProducto, int pidUsuario)
+            public DataTable saveUsuarioMaterial(int pidProyecto, int pidProducto, int pidUsuario)
             {
                 try
                 {
@@ -491,7 +513,7 @@ namespace DATABANK.App_Data
                     string sas = e.Message; throw;
                 }
             }
-            public DataTable ActualizarEstadoTemporal(int pidProducto, int idUsuario,int idEstado)
+            public DataTable ActualizarEstadoTemporal(int pidProducto, int idUsuario, int idEstado, int conteo)
             {
                 try
                 {
@@ -500,6 +522,7 @@ namespace DATABANK.App_Data
                     da.SelectCommand.Parameters.Add("@pidProducto", SqlDbType.Int).Value = pidProducto;
                     da.SelectCommand.Parameters.Add("@pidUsuario", SqlDbType.VarChar).Value = idUsuario;
                     da.SelectCommand.Parameters.Add("@pidEstado", SqlDbType.VarChar).Value = idEstado;
+                    da.SelectCommand.Parameters.Add("@pconteo", SqlDbType.VarChar).Value = conteo;
                     da.SelectCommand.CommandType = CommandType.StoredProcedure;
                     DataTable dt = new DataTable();
                     da.Fill(dt);
@@ -570,6 +593,8 @@ namespace DATABANK.App_Data
                     da.SelectCommand.Parameters.Add("@pimagen", SqlDbType.VarChar).Value = model.imagen;
                     da.SelectCommand.Parameters.Add("@pcodigo", SqlDbType.VarChar).Value = model.codigo;
                     da.SelectCommand.Parameters.Add("@pidEstado", SqlDbType.Int).Value = model.idEstado;
+                    da.SelectCommand.Parameters.Add("@pidDepartamento", SqlDbType.Int).Value = model.idDepartamento;
+                    da.SelectCommand.Parameters.Add("@pidMunicipio", SqlDbType.Int).Value = model.idMunicipio;
                     da.SelectCommand.CommandType = CommandType.StoredProcedure;
                     DataTable dt = new DataTable();
                     da.Fill(dt);
@@ -716,6 +741,25 @@ namespace DATABANK.App_Data
                     string sas = e.Message; throw;
                 }
             }
+            public DataTable getDataDepartamento(int pidDepartamento = 0)
+            {
+                try
+                {
+                    SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["CustomerDataConnectionString"].ConnectionString);
+                    SqlDataAdapter da = new SqlDataAdapter("SP_getDataDepartamento", con);
+                    da.SelectCommand.Parameters.Add("@pidDepartamento", SqlDbType.Int).Value = pidDepartamento;
+                    da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    return dt;
+
+                }
+                catch (Exception e)
+                {
+
+                    string sas = e.Message; throw;
+                }
+            }
             public DataTable getDataProyectoUsuario(int pidProyecto = 0)
             {
                 try
@@ -723,6 +767,25 @@ namespace DATABANK.App_Data
                     SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["CustomerDataConnectionString"].ConnectionString);
                     SqlDataAdapter da = new SqlDataAdapter("SP_getDataProyectoUsuario", con);
                     da.SelectCommand.Parameters.Add("@pidProyecto", SqlDbType.Int).Value = pidProyecto;
+                    da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    return dt;
+
+                }
+                catch (Exception e)
+                {
+
+                    string sas = e.Message; throw;
+                }
+            }
+            public DataTable getDepartamentoMunicipio(int pidDepartamento)
+            {
+                try
+                {
+                    SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["CustomerDataConnectionString"].ConnectionString);
+                    SqlDataAdapter da = new SqlDataAdapter("SP_getDepartamentoMunicipio", con);
+                    da.SelectCommand.Parameters.Add("@pidDepartamento", SqlDbType.Int).Value = pidDepartamento;
                     da.SelectCommand.CommandType = CommandType.StoredProcedure;
                     DataTable dt = new DataTable();
                     da.Fill(dt);
@@ -750,6 +813,8 @@ namespace DATABANK.App_Data
                     da.SelectCommand.Parameters.Add("@ptelefono", SqlDbType.VarChar).Value = model.Telefono;
                     da.SelectCommand.Parameters.Add("@plogo", SqlDbType.VarChar).Value = model.Logo;
                     da.SelectCommand.Parameters.Add("@pidEstado", SqlDbType.Int).Value = 1;
+                    da.SelectCommand.Parameters.Add("@pidDepartamento", SqlDbType.Int).Value = model.idDepartamento;
+                    da.SelectCommand.Parameters.Add("@pidMunicipio", SqlDbType.Int).Value = model.idMunicipio;
                     da.SelectCommand.CommandType = CommandType.StoredProcedure;
                     DataTable dt = new DataTable();
                     da.Fill(dt);
@@ -762,8 +827,8 @@ namespace DATABANK.App_Data
                     string sas = e.Message; throw;
                 }
             }
-            
-            public DataTable savePermiso(int id, string t, string g, string ed,string d, string im, string ex)
+
+            public DataTable savePermiso(int id, string t, string g, string ed, string d, string im, string ex)
             {
                 try
                 {
@@ -788,7 +853,7 @@ namespace DATABANK.App_Data
                     string sas = e.Message; throw;
                 }
             }
-           
+
             public DataTable saveProyectoUpdate(DATABANK.Models.Proyecto model)
             {
                 try
@@ -804,7 +869,9 @@ namespace DATABANK.App_Data
                     da.SelectCommand.Parameters.Add("@pdireccion", SqlDbType.VarChar).Value = model.Direccion;
                     da.SelectCommand.Parameters.Add("@ptelefono", SqlDbType.VarChar).Value = model.Telefono;
                     da.SelectCommand.Parameters.Add("@plogo", SqlDbType.VarChar).Value = model.Logo;
-                    da.SelectCommand.Parameters.Add("@pidEstado", SqlDbType.Int).Value = 1;
+                    da.SelectCommand.Parameters.Add("@pidEstado", SqlDbType.Int).Value = model.idEstado;
+                    da.SelectCommand.Parameters.Add("@pidDepartamento", SqlDbType.Int).Value = model.idDepartamento;
+                    da.SelectCommand.Parameters.Add("@pidMunicipio", SqlDbType.Int).Value = model.idMunicipio;
                     da.SelectCommand.CommandType = CommandType.StoredProcedure;
                     DataTable dt = new DataTable();
                     da.Fill(dt);
@@ -1030,7 +1097,7 @@ namespace DATABANK.App_Data
                     da.SelectCommand.Parameters.Add("@pobservacion", SqlDbType.VarChar).Value = model.Observacion;
                     da.SelectCommand.Parameters.Add("@pUbicacionAuxiliar", SqlDbType.VarChar).Value = model.ubicacionAuxiliar;
                     da.SelectCommand.Parameters.Add("@pidEstado", SqlDbType.Int).Value = model.idEstado;
-                    if(model.idCategoria == 0)
+                    if (model.idCategoria == 0)
                     {
                         da.SelectCommand.Parameters.Add("@pidCategoria", SqlDbType.Int).Value = 5;
                     }

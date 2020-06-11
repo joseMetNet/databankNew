@@ -24,9 +24,10 @@
                         <tr style="background-color:#434343; color:white;">
                             <th class="text-center">Proyecto</th>
                             <th class="text-center">Cliente</th>
-                            <th class="text-center">Sucursal</th>
-                            <th class="text-center">Dirección</th>
-                            @*<th class="text-center">LNS</th>*@
+                            <th class="text-center">Departamento</th>
+                            <th class="text-center">Municipio</th>
+                            <th class="text-center">Total Lineas</th>
+                            <th class="text-center">Lineas Contadas</th>
                             <th class="text-center">Estado</th>
                             <th class="text-center" style="width:15%">Operación</th>
                         </tr>
@@ -50,9 +51,36 @@
                                 </div>
                             </td>
                             <td class="text-center">@proyecto["Cliente"]</td>
-                            <td class="text-center">@proyecto["sucursal"]</td>
-                            <td class="text-center">@proyecto["direccion"]</td>
-                            @*<td class="text-center">@proyecto["LNS"]</td>*@
+                            <td class="text-center">@proyecto["departamento"]</td>
+                            <td class="text-center">@proyecto["municipio"]</td>
+                            <td class="text-center">
+                                @if (ViewBag.TL.Count > 0)
+                                {
+                                    foreach (var rowc in ViewBag.TL)
+                                    {
+                                        if (rowc["idProyecto"].ToString() == proyecto["idProyecto"].ToString())
+                                        {
+                                            <a class="text-default font-weight-semibold text-uppercase">
+                                                @rowc["TL"]
+                                            </a>
+                                        }
+                                    }
+                                }
+                            </td>
+                            <td class="text-center">
+                                @if (ViewBag.LC.Count > 0)
+                                {
+                                    foreach (var rowc in ViewBag.LC)
+                                    {
+                                        if (rowc["idProyecto"].ToString() == proyecto["idProyecto"].ToString())
+                                        {
+                                            <a class="text-default font-weight-semibold text-uppercase">
+                                                @rowc["LC"]
+                                            </a>
+                                        }
+                                    }
+                                }
+                            </td>
                             <td class="text-center">@proyecto["estado"]</td>
                             <td class="p-1 text-center">
                                 <a data-href="@Url.Action("editProyecto", new { @id=proyecto["idProyecto"]})" class="btn btn-danger btn-action mr-1 editUser" title="Editar Proyecto" style="background-color:#01abe8;border-color:#01abe8"><i class="fa fa-edit"></i></a>

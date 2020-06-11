@@ -236,6 +236,8 @@ namespace DATABANK.Controllers
             ConnectionDataBase.StoreProcediur data = new ConnectionDataBase.StoreProcediur();
             DataTable dt = data.getDataProyecto();
             ViewBag.ListaProyecto = dt.Rows;
+            dt = data.getDataDepartamento();
+            ViewBag.ListaDepartamento = dt.Rows;
             return View("/Views/administrador/partialsBodega/create.cshtml");
         }
         public ActionResult saveBodega(Models.Bodega model)
@@ -308,6 +310,8 @@ namespace DATABANK.Controllers
             ViewBag.ListaEstado = dt.Rows;
             dt = data.getDataProyecto();
             ViewBag.ListaProyecto = dt.Rows;
+            dt = data.getDataDepartamento();
+            ViewBag.ListaDepartamento = dt.Rows;
             return View("/Views/administrador/partialsBodega/edit.cshtml");
         }
         public ActionResult CargarInfo()
@@ -519,6 +523,10 @@ namespace DATABANK.Controllers
 
             DataTable dt = data.getDataProyecto();
             ViewBag.proyecto = dt.Rows;
+            dt = data.ObtenerData("SP_getLineasTotales");
+            ViewBag.TL = dt.Rows;
+            dt = data.ObtenerData("SP_getLineasContadas");
+            ViewBag.LC = dt.Rows;
             return View("/Views/administrador/partialsProyecto/table.cshtml");
         }
         public ActionResult createProyectos()
@@ -536,7 +544,8 @@ namespace DATABANK.Controllers
             ViewBag.ListaUsuario = dt.Rows;
             dt = data.ObtenerData("SP_getSucursal");
             ViewBag.ListaSucursal = dt.Rows;
-
+            dt = data.getDataDepartamento();
+            ViewBag.ListaDepartamento = dt.Rows;
             return View("/Views/administrador/partialsProyecto/create.cshtml");
         }
 
@@ -604,7 +613,8 @@ namespace DATABANK.Controllers
             ViewBag.ListaCliente = dt.Rows;
             dt = data.ObtenerData("SP_getSucursal");
             ViewBag.ListaSucursal = dt.Rows;
-
+            dt = data.getDataDepartamento();
+            ViewBag.ListaDepartamento = dt.Rows;
             return View("/Views/administrador/partialsProyecto/edit.cshtml");
         }
         
@@ -655,9 +665,9 @@ namespace DATABANK.Controllers
             }
 
             if (model.idProyecto == 0)
-                return RedirectToAction("editProyecto", new {@id = model.idProyecto });
+                return RedirectToAction("Proyectos");
             else
-                return RedirectToAction("editProyecto", new { @id = model.idProyecto });
+                return RedirectToAction("Proyectos");
         }
         public ActionResult saveProyectoUsuario(Models.Proyecto model)
         {
@@ -940,14 +950,14 @@ namespace DATABANK.Controllers
                                         }
                                         else
                                         {
-                                            idBodega = 7;
+                                            idBodega = 2;
                                             Linea = variable;
                                             observacion = "No se encontro la BODEGA";
                                         }
                                     }
                                     else
                                     {
-                                        idBodega = 7;
+                                        idBodega = 2;
                                         Linea = variable;
                                         observacion = "Campo BODEGA vacio";
                                     }
@@ -1111,12 +1121,20 @@ namespace DATABANK.Controllers
                                     errores.Rows.Clear();
 
                                 }
-                                else
+                                else if(dtfinal.Rows.Count > 0)
                                 {
+                                    DataTable eliminar = data.eliminarTemporalErrores(model.idProyecto);
                                     DataTable tm = data.CargarMaterialesTemporal(dtfinal);
                                     valoresCargados = valoresCargados + dtfinal.Rows.Count;
                                     DataTable cargar = data.CargarTablaMateriales(model.idProyecto);
                                     dtfinal.Rows.Clear();
+                                }
+                                else
+                                {
+                                    TempData["message"] = "La plantilla no cuenta con el formato correcto, intente de nuevo";
+                                    TempData["title"] = "Error.";
+                                    TempData["type"] = "error";
+                                    return RedirectToAction("CargarInfo");
                                 }
                             }
                         }
@@ -1193,7 +1211,8 @@ namespace DATABANK.Controllers
 
                 idUsuario = Convert.ToInt32(Session["idUsuario"]);
                 dd = data.getProyectoBodega(idProyecto,idUsuario);
-                if (dd.Rows.Count > 0)
+                DataRow row = dd.Rows[0];
+                if (row["respuesta"].ToString() != "0")
                 {
                     DataTable dt = data.getDataProducto(Convert.ToInt32(dd.Rows[0]["idProducto"]));
                     ViewBag.Producto = dt.Rows[0];
@@ -1211,12 +1230,21 @@ namespace DATABANK.Controllers
                 }
                 else
                 {
-                    DataTable dm = data.ActualizarEstadoProducto(idProyecto);
-                    TempData["message"] = "Inspección Terminada.";
-                    TempData["title"] = "Muy Bien.";
-                    TempData["type"] = "success";
-                    return RedirectToAction("ListaInspecciones");
-
+                    if (row["respuesta"].ToString() == "0")
+                    {
+                        TempData["message"] = "no se encuentra asignado a este inventario.";
+                        TempData["title"] = "Este Usuario";
+                        TempData["type"] = "error";
+                        return RedirectToAction("ListaMaterialesInspeccion");
+                    }
+                    else
+                    {
+                        DataTable dm = data.ActualizarEstadoProducto(idProyecto);
+                        TempData["message"] = "Inspección Terminada.";
+                        TempData["title"] = "Muy Bien.";
+                        TempData["type"] = "success";
+                        return RedirectToAction("ListaInspecciones");
+                    }
                 }
             }
             else
@@ -1226,15 +1254,15 @@ namespace DATABANK.Controllers
             
         }
         
-        public ActionResult saveInspeccion(Models.Inspeccion model)
+        public ActionResult saveInspeccion(Models.Inspeccion model, int idProyecto = 0)
         {
             Session["alve"] = "config";
             ConnectionDataBase.StoreProcediur data = new ConnectionDataBase.StoreProcediur();
             int idUsuario = Convert.ToInt32(Session["idUsuario"]);
             DataTable dp = data.getDataBodega(model.idBodega);
-            int idProyecto = Convert.ToInt32(dp.Rows[0]["idProyecto"]);
+            //int idProyecto = Convert.ToInt32(dp.Rows[0]["idProyecto"]);
             DataTable dt = data.saveInspeccion(model,idProyecto);
-            DataTable dm = data.ActualizarEstadoTemporal(model.idProducto, idUsuario,6);
+            DataTable dm = data.ActualizarEstadoTemporal(model.idProducto, idUsuario,6, Convert.ToInt32(model.Conteo));
             DataRow row = dt.Rows[0];
             var nomaas = Request.Files;
             int i = 0;
@@ -1382,6 +1410,14 @@ namespace DATABANK.Controllers
             ConnectionDataBase.StoreProcediur data = new ConnectionDataBase.StoreProcediur();
             DataTable dd = data.getDataBodega(id);
             DataTable dt = data.getDataProyectoUsuario(Convert.ToInt32(dd.Rows[0]["idProyecto"]));
+            ViewBag.result = datatabletojson(dt);
+
+            return Json(ViewBag.result, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult getDepartamentoMunicipio(int id)
+        {
+            ConnectionDataBase.StoreProcediur data = new ConnectionDataBase.StoreProcediur();
+            DataTable dt = data.getDepartamentoMunicipio(id);
             ViewBag.result = datatabletojson(dt);
 
             return Json(ViewBag.result, JsonRequestBehavior.AllowGet);

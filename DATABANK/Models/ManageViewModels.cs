@@ -46,6 +46,8 @@ namespace DATABANK.Models
         public string codigo { get; set; }
         public int idEstado { get; set; }
         public int idProyecto { get; set; }
+        public int idDepartamento { get; set; }
+        public int idMunicipio { get; set; }
     }
     public class Proyecto
     {
@@ -54,7 +56,7 @@ namespace DATABANK.Models
         public string Documento { get; set; }
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
-        public int Cliente { get; set; }
+        public string Cliente { get; set; }
         public string Direccion { get; set; }
         public string Telefono { get; set; }
         public string Logo { get; set; }
@@ -72,6 +74,8 @@ namespace DATABANK.Models
         public string Eliminar { get; set; }
         public string Importar { get; set; }
         public string Exportar { get; set; }
+        public int idDepartamento { get; set; }
+        public int idMunicipio { get; set; }
 
     }
     public class Producto

@@ -53,6 +53,11 @@ namespace DATABANK
                 url: "{controller}/{action}/{id}/{pstatus}",
                 defaults: new { controller = "administrador", action = "deActivateInventario", id = UrlParameter.Optional, pstatus = UrlParameter.Optional, httproute = true }
             );
+            routes.MapRoute(
+                name: "Default9",
+                url: "{controller}/{action}/{id}/{pstatus}",
+                defaults: new { controller = "administrador", action = "getDepartamentoMunicipio", id = UrlParameter.Optional, pstatus = UrlParameter.Optional, httproute = true }
+            );
         }
     }
 }

@@ -68,6 +68,24 @@
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
+                                <label>Departamento <span class="text-danger">*</span></label>
+                                <select name="idDepartamento" id="idDepartamento" class="form-control selectcount" required style="width:100%">
+                                    <option></option>
+                                    @foreach (var departamento in ViewBag.ListaDepartamento)
+                                    {
+                                        <option value="@departamento["idDepartamento"]">@departamento["Departamento"]</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Municipio<span class="text-danger">*</span></label>
+                                <select name="idMunicipio" id="idMunicipio" class="form-control selectcount" required style="width:100%"></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
                                 <label>Cliente<span class="text-danger">*</span></label>
                                 <input type="text" name="Cliente" required class="form-control form-control-sm">
                             </div>
@@ -136,6 +154,20 @@
         $(".selectcount2").select2({
             placeholder: "Seleccionar",
             allowClear: true
+        });
+        $("#idDepartamento").change(function () {
+            var koa = $(this).val();
+            if (parseInt(koa) > 0) {
+                $.get("/administrador/getDepartamentoMunicipio", { id: koa }, function (data) {
+                    data = $.parseJSON(data);
+                    $("#idMunicipio").empty();
+                    $("#idMunicipio").append("<option ></option>")
+                    $.each(data, function (index, row) {
+                        $("#idMunicipio").append("<option value='" + row.idMunicipio + "'>" + row.Municipio + "</option>")
+                    });
+                });
+            }
+            $("#idMunicipio").empty();
         });
     </script>
 }
