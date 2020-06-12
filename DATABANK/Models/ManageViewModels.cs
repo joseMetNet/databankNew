@@ -104,6 +104,12 @@ namespace DATABANK.Models
         public int idCategoria { get; set; }
         public string Conteo { get; set; }
         public string profileImg { get; set; }
+        public int idBodegaP { get; set; }
+        public string codigoP { get; set; }
+        public string descripcionP { get; set; }
+        public int cantidadP { get; set; }
+        public int idUnidadMedidaP { get; set; }
+        public string UbicacionP { get; set; }
     }
 
 }

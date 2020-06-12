@@ -1,0 +1,204 @@
+﻿@model DATABANK.Models.Bodega
+@{
+    ViewBag.Title = "Creacion Empleado";
+    Layout = "~/Views/Shared/gestionView.cshtml";
+}
+
+<section class="section">
+    <h5 class="section-header">
+        Editar Bodega
+    </h5>
+</section>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-12">
+                <small class="text-danger">Los campos con asteriscos son obligatorios.</small>
+            </div>
+        </div>
+        <div class="row">
+            <form action="@Url.Action("saveBodegaUpdate")" method="post" id="formsaveemployee" class="col-sm-12 row" enctype="multipart/form-data">
+                <input type="hidden" name="idBodega" value="@ViewBag.bodega["idBodega"]" />
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            <h4 class="h6">Imagen</h4>
+                            <img src="@ViewBag.bodega["imagen"]" id="imgCompany" class="img-thumbnail" width="150" height="150" />
+                            <div class="input-group input-group-lg">
+                                <input type="file" name="imagen" class="custom-file-input" onchange="document.getElementById('imgCompany').src = window.URL.createObjectURL(this.files[0])" />
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-4"></div>
+                        <div class="col-md-4 mb-3">
+                            <div class="input-group input-group-lg">
+                                <input type="file" name="imagen" class="form-control-file" id="customFile" onchange="document.getElementById('imgCompany').src = window.URL.createObjectURL(this.files[0])">
+                            </div>
+                        </div>
+                        <div class="col-sm-4"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Proyecto <span class="text-danger">*</span></label>
+                                <select name="idProyecto" class="form-control selectcount" required style="width:100%">
+                                    <option></option>
+                                    @foreach (var proyecto in ViewBag.ListaProyecto)
+                                    {
+                                        if (Convert.ToInt32(ViewBag.bodega["idProyecto"]) == @proyecto["idProyecto"])
+                                        {
+                                            <option selected value="@proyecto["idProyecto"]">@proyecto["NombreProyecto"]</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@proyecto["idProyecto"]">@proyecto["NombreProyecto"]</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Nombre<span class="text-danger">*</span></label>
+                                <input type="text" name="nombre" class="form-control form-control-sm" value="@ViewBag.bodega["nombreBodega"]" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Codigo<span class="text-danger">*</span></label>
+                                <input type="text" name="codigo" required class="form-control form-control-sm" value="@ViewBag.bodega["codigo"]">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Departamento <span class="text-danger">*</span></label>
+                                <select name="idDepartamento" id="idDepartamento" class="form-control selectcount" required style="width:100%">
+                                    <option></option>
+                                    @foreach (var departamento in ViewBag.ListaDepartamento)
+                                    {
+                                        if (Convert.ToInt32(ViewBag.bodega["idDepartamento"]) == departamento["idDepartamento"])
+                                        {
+                                            <option selected value="@departamento["idDepartamento"]">@departamento["Departamento"]</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@departamento["idDepartamento"]">@departamento["Departamento"]</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Municipio <span class="text-danger">*</span></label>
+                                <select name="idMunicipio" id="idMunicipio" class="form-control selectcount" required style="width:100%"></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Estado <span class="text-danger">*</span></label>
+                                <select name="idEstado" class="form-control selectcount" required style="width:100%">
+                                    <option></option>
+                                    @foreach (var estado in ViewBag.ListaEstado)
+                                    {
+                                        if (Convert.ToInt32(ViewBag.bodega["idEstado"]) == @estado["idEstado"])
+                                        {
+                                            <option selected value="@estado["idEstado"]">@estado["estado"]</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@estado["idEstado"]">@estado["estado"]</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 text-center">
+                            <br><br>
+                            <div class="row">
+                                <div class="col-sm-6 text-right">
+                                    <div class="form-group">
+                                        <a href="@Url.Action("bodegas")" class="btn btn-secondary" style="background-color:#94999c;border-color:#94999c">Cancelar</a>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 text-left">
+                                    <div class="form-group">
+                                        <input type="submit" value="Guardar Bodega" class="btn btn-danger" style="background-color:#01abe8;border-color:#01abe8">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    @if (TempData["message"] != null)
+    {
+        <script type="text/javascript">
+            Swal.fire({
+                type: '@TempData["type"]',
+                title: '@TempData["title"]',
+                html: '@TempData["message"]',
+                showConfirmButton: false,
+                width: 300,
+                High: 300,
+                timer: 3000
+            })
+        </script>
+    }
+<script type="text/javascript">
+        $(".fijo").mask('000000000000000');
+        $("#phonee").mask('(000) 000-0000');
+        $(".selectcount").select2({
+            placeholder: "Seleccionar",
+            allowClear: true
+        })
+        $(".selectcount1").select2({
+            placeholder: "Seleccionar",
+            allowClear: true
+        })
+        $(".selectcount2").select2({
+            placeholder: "Seleccionar",
+            allowClear: true
+        });
+        $(".filtros").DataTable({
+            "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
+            destroy: true,
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json'
+            }
+        });
+        $("#idDepartamento").change(function () {
+            var koa = $(this).val();
+            if (parseInt(koa) > 0) {
+                $.get("/administrador/getDepartamentoMunicipio", { id: koa }, function (data) {
+                    data = $.parseJSON(data);
+                    $("#idMunicipio").empty();
+                    $("#idMunicipio").append("<option ></option>")
+                    $.each(data, function (index, row) {
+                        if (@ViewBag.bodega["idMunicipio"] == row.idMunicipio)
+                            $("#idMunicipio").append("<option selected value='" + row.idMunicipio + "'>" + row.Municipio + "</option>")
+                        else
+                            $("#idMunicipio").append("<option  value='" + row.idMunicipio + "'>" + row.Municipio + "</option>")
+                    });
+                });
+                //$("#statuscontract").select2()
+            }
+            $("#idMunicipio").empty();
+        });
+        $("#idDepartamento").val(@ViewBag.bodega["idDepartamento"]).trigger("change");
+        $(document).ready(function () {
+            setTimeout($("#idMunicipio").val(@ViewBag.bodega["idMunicipio"]).trigger("change")
+                , 10000);
+        });
+
+</script>
+}
+
+

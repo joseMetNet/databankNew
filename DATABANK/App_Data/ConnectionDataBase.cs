@@ -444,21 +444,21 @@ namespace DATABANK.App_Data
                     string sas = e.Message; throw;
                 }
             }
-            public DataTable saveProducto(DATABANK.Models.Producto model)
+            public DataTable saveProducto(int pidProyecto,int pidBodega, string pUbicacion,string pCodigo,int pidUnidadMedida
+                ,string pDescripcion, int pCantidad, int pidOperario)
             {
                 try
                 {
                     SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["CustomerDataConnectionString"].ConnectionString);
                     SqlDataAdapter da = new SqlDataAdapter("SP_saveProducto", con);
-                    da.SelectCommand.Parameters.Add("@pidBodega", SqlDbType.Int).Value = model.idBodega;
-                    da.SelectCommand.Parameters.Add("@pCodigo", SqlDbType.VarChar).Value = model.Codigo;
-                    da.SelectCommand.Parameters.Add("@pNombreProducto", SqlDbType.VarChar).Value = model.NombreProducto;
-                    da.SelectCommand.Parameters.Add("@pcantidad", SqlDbType.Int).Value = model.Cantidad;
-                    da.SelectCommand.Parameters.Add("@pidUnidadMedida", SqlDbType.Int).Value = model.idUnidadMedida;
-                    da.SelectCommand.Parameters.Add("@pUbicacion", SqlDbType.VarChar).Value = model.Ubicacion;
-                    da.SelectCommand.Parameters.Add("@pidEstado", SqlDbType.Int).Value = 1;
-                    da.SelectCommand.Parameters.Add("@pdescripcion", SqlDbType.VarChar).Value = model.descripcion;
-                    da.SelectCommand.Parameters.Add("@pidUsuario", SqlDbType.Int).Value = model.idUsuario;
+                    da.SelectCommand.Parameters.Add("@pidProyecto", SqlDbType.Int).Value = pidProyecto;
+                    da.SelectCommand.Parameters.Add("@pidBodega", SqlDbType.Int).Value = pidBodega;
+                    da.SelectCommand.Parameters.Add("@pUbicacion", SqlDbType.VarChar).Value = pUbicacion;
+                    da.SelectCommand.Parameters.Add("@pCodigo", SqlDbType.VarChar).Value = pCodigo;
+                    da.SelectCommand.Parameters.Add("@pidUnidadMedida", SqlDbType.Int).Value = pidUnidadMedida;
+                    da.SelectCommand.Parameters.Add("@pDescripcion", SqlDbType.VarChar).Value = pDescripcion;
+                    da.SelectCommand.Parameters.Add("@pcantidad", SqlDbType.Int).Value = pCantidad;
+                    da.SelectCommand.Parameters.Add("@pidOperario", SqlDbType.Int).Value = pidOperario;
                     da.SelectCommand.CommandType = CommandType.StoredProcedure;
                     DataTable dt = new DataTable();
                     da.Fill(dt);

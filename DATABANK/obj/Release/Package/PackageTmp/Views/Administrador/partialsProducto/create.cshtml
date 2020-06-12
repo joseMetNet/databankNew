@@ -1,0 +1,158 @@
+﻿@model DATABANK.Models.Producto
+@{
+    Layout = "~/Views/Shared/gestionView.cshtml";
+}
+
+<section class="section">
+    <h5 class="section-header">
+        Crear Material
+    </h5>
+</section>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-12">
+                <small class="text-danger">Los campos con asteriscos son obligatorios.</small>
+            </div>
+        </div>
+        <div class="row">
+            <form action="saveProducto" method="post" id="formsaveemployee" class="container" enctype="multipart/form-data">
+                <br />
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Bodega<span class="text-danger">*</span></label>
+                                <select name="idBodega" id="idBodega" required class="form-control selectcount usuario" style="width:100%">
+                                    <option></option>
+                                    @foreach (var bodega in ViewBag.ListaBodega)
+                                    {
+                                        <option value="@bodega["idBodega"]">@bodega["NombreBodega"]</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Código<span class="text-danger">*</span></label>
+                                <input type="text" name="codigo" required class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Nombre Material<span class="text-danger">*</span></label>
+                                <input type="text" name="NombreProducto" class="form-control form-control-sm" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Cantidad<span class="text-danger">*</span></label>
+                                <input type="text" name="Cantidad" class="form-control form-control-sm" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Unidad de Medida<span class="text-danger">*</span></label>
+                                <select name="idUnidadMedida" required class="form-control selectcount usuario" style="width:100%">
+                                    <option></option>
+                                    @foreach (var unidad in ViewBag.ListaUnidadMedida)
+                                    {
+                                        <option value="@unidad["idUnidadMedida"]">@unidad["UnidadMedida"]</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Ubicación<span class="text-danger">*</span></label>
+                                <input type="text" name="ubicacion" class="form-control form-control-sm" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Descripción<span class="text-danger">*</span></label>
+                                <textarea name="descripcion" class="form-control form-control-sm" required></textarea>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Operario<span class="text-danger">*</span></label>
+                                <select name="idUsuario" id="idUsuario" class="form-control selectcount" required></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 text-center">
+                            <br><br>
+                            <div class="row">
+                                <div class="col-sm-6 text-right">
+                                    <div class="form-group">
+                                        <a href="@Url.Action("Productos")" class="btn btn-secondary" style="background-color:#94999c;border-color:#94999c">Cancelar</a>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 text-left">
+                                    <div class="form-group">
+                                        <input type="submit" value="Guardar Material" class="btn btn-danger" style="background-color:#01abe8;border-color:#01abe8">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section scripts{
+    @if (TempData["message"] != null)
+    {
+        <script type="text/javascript">
+            Swal.fire({
+                type: '@TempData["type"]',
+                title: '@TempData["title"]',
+                html: '@TempData["message"]',
+                showConfirmButton: false,
+                width: 300,
+                High: 300,
+                timer: 3000
+            })
+        </script>
+    }
+    <script type="text/javascript">
+
+        $(".fijo").mask('000000000000000');
+        $(".phonee").mask('(000) 000-0000');
+        $(".selectcount").select2({
+            placeholder: "Seleccionar",
+            allowClear: true
+        })
+        $(".selectcount1").select2({
+            placeholder: "Seleccionar",
+            allowClear: true
+        })
+        $(".selectcount2").select2({
+            placeholder: "Seleccionar",
+            allowClear: true
+        });
+        $("#idBodega").change(function () {
+            var koa = $(this).val();
+            if (parseInt(koa) > 0) {
+                $.get("/administrador/getUsuarioProyecto", { id: koa }, function (data) {
+                    data = $.parseJSON(data);
+                    $("#idUsuario").empty();
+                    $("#idUsuario").append("<option ></option>")
+                    $.each(data, function (index, row) {
+                        $("#idUsuario").append("<option value='" + row.idUsuario + "'>" + row.NombreUsuario + "</option>")
+                    });
+                });
+                //$("#statuscontract").select2()
+            }
+            $("#idUsuario").empty();
+        });
+        //$("#idBodega").change(function () {
+        //    $("select[name=idUsuario]").change(function () {
+        //        alert($('select[name=idUsuario]').val());
+        //    });
+        //});
+    </script>
+}
+
+

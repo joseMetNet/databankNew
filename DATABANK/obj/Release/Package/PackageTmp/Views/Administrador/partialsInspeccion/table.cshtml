@@ -1,0 +1,142 @@
+﻿@{
+    ViewBag.Title = "empleados";
+    Layout = "~/Views/Shared/gestionView.cshtml";
+}
+<section class="section">
+    <h5 class="section-header">
+        Lista Inspecciones
+    </h5>
+</section>
+<div class="card">
+    <div class="card-body">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped filtros">
+                    <thead>
+                        <tr style="background-color:#434343; color:white;">
+                            <th class="text-center">#</th>
+                            <th class="text-center">Bodega</th>
+                            <th class="text-center">Producto</th>
+                            <th class="text-center">Cantidad Inicial</th>
+                            <th class="text-center">Fecha Inventario</th>
+                            <th class="text-center">Conteo Inspección</th>
+                            <th class="text-center">Fecha Inspección</th>
+                            <th class="text-center">Estado Inspección</th>
+                            <th class="text-center" style="width:15%">Operación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var inspeccion in ViewBag.inspeccion)
+                        {
+                        <tr>
+                            <td class="text-center">
+                                @if (inspeccion["Conteo"] == inspeccion["QTY"])
+                                {
+                                    <a data-href="#" class="btn btn-sm btn-success" style="width: 25px; height: 25px;-moz-border-radius: 50%; -webkit-border-radius: 50%;border-radius: 50%;"/>
+                                }
+                                else if (inspeccion["Conteo"] < inspeccion["QTY"])
+                                {
+                                    <a data-href="#" class="btn btn-sm btn-danger" style="width: 25px; height: 25px;-moz-border-radius: 50%; -webkit-border-radius: 50%;border-radius: 50%;" />
+                                }
+                                else if (inspeccion["Conteo"] > inspeccion["QTY"])
+                                {
+                                    <a data-href="#" class="btn btn-sm btn-dark" style="width: 25px; height: 25px;-moz-border-radius: 50%; -webkit-border-radius: 50%;border-radius: 50%;background-color:#F7FE2E;border-color:#F7FE2E"/>
+                                }
+                            </td>
+                            <td class="text-center">@inspeccion["NombreBodega"]</td>
+                            <td class="text-center">@inspeccion["Descripcion"]</td>
+                            <td class="text-center">@inspeccion["QTY"]</td>
+                            <td class="text-center">@inspeccion["FechaCreacion"].ToString("yyyy-MM-dd")</td>
+                            <td class="text-center">@inspeccion["Conteo"]</td>
+                            <td class="text-center">@inspeccion["fechaInspeccion"].ToString("yyyy-MM-dd")</td>
+                            <td class="text-center">@inspeccion["Estado"]</td>
+                            <td class="text-center">
+                                <a data-href="@Url.Action("showInspeccion", new { @id=inspeccion["idInspeccion"]})" class="editUser"><span class="btn btn-sm btn-danger" style="background-color:#01abe8;border-color:#01abe8">Detalle Inspección</span></a>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    @if (TempData["message"] != null)
+    {
+        <script type="text/javascript">
+            Swal.fire({
+                type: '@TempData["type"]',
+                title: '@TempData["title"]',
+                html: '@TempData["message"]',
+                showConfirmButton: false,
+                width: 300,
+                High: 300,
+                timer: 3000
+            })
+        </script>
+    }
+    <script type="text/javascript">
+        $(".filtros").DataTable({
+            "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
+            destroy: true,
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json'
+            }
+        });
+        $(document).on("click", ".editUser", function () {
+            var asd = $(this).data("href");
+            Swal.fire({
+                title: "¿Está seguro de ver esta inspección?",
+                type: 'question',
+                showCancelButton: true,
+                showConfirmButton: true,
+                confirmButtonColor: '#01abe8',
+                cancelButtonColor: '#94999c',
+                confirmButtonText: 'Aceptar',
+                cancelButtonText: 'Cancelar',
+                width: 330,
+                High: 330,
+            }).then((result) => {
+                if (result.value) {
+                    location.replace(asd)
+                }
+            });
+        });
+        $(document).on("click", ".deActivateInventario", function () {
+            var jas = $(this).data("user")
+            var okk = $(this).data("text")
+            var aaa = $(this).data("status")
+            Swal.fire({
+                title: "¿Está Seguro?",
+                html: okk,
+                type: 'question',
+                showCancelButton: true,
+                showConfirmButton: true,
+                confirmButtonColor: '#01abe8',
+                cancelButtonColor: '#94999c',
+                confirmButtonText: 'Aceptar',
+                width: 330,
+                High: 330,
+            }).then((result) => {
+                if (result.value) {
+                    $.get("/administrador/deActivateInventario/" + jas + "/" + aaa, function (data) {
+                        if (data.result == 1) {
+                            Swal.fire({
+                                type: 'success',
+                                title: "Inventario modificado con éxito. ",
+                                showConfirmButton: true,
+                                confirmButtonColor: '#01abe8',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Aceptar',
+                                cancelButtonText: 'Cancelar',
+                            });
+                        }
+                        location.reload();
+                    });
+                }
+            });
+        });
+    </script>
+}
+

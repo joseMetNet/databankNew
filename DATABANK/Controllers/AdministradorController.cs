@@ -416,46 +416,7 @@ namespace DATABANK.Controllers
             ViewBag.ListaUsuario = dt.Rows;
             return View("/Views/administrador/partialsProducto/create.cshtml");
         }
-        public ActionResult saveProducto(Models.Producto model)
-        {
-            Session["alve"] = "config";
-            ConnectionDataBase.StoreProcediur data = new ConnectionDataBase.StoreProcediur();
-
-            DataTable dt = data.saveProducto(model);
-            DataRow row = dt.Rows[0];
-            if (dt.Rows.Count == 1)
-            {
-                if (row["respuesta"].ToString() == "0")
-                {
-                    TempData["type"] = "error";
-                    TempData["title"] = "Error";
-                    TempData["message"] = "El Material con el codigo " + model.Codigo + "   ya se encuentra registrado en el sistema.";
-                    RedirectToAction("createProducto");
-                }
-                else
-                {
-                    if (dt.Rows.Count > 0)
-                    {
-                        if (model.idProducto == 0)
-                        {
-                            TempData["message"] = "Material creado con éxito.";
-                            TempData["title"] = "Muy Bien.";
-                            TempData["type"] = "success";
-                        }
-                    }
-                    else
-                    {
-                        TempData["message"] = "Problemas al crear el material, intente nuevamente.";
-                        TempData["title"] = "Error.";
-                        TempData["type"] = "error";
-                    }
-                }
-            }
-            if (model.idProducto == 0)
-                return RedirectToAction("Productos");
-            else
-                return RedirectToAction("Productos");
-        }
+        
         public ActionResult editProducto(int id)
         {
             Session["alve"] = "config";
@@ -1211,31 +1172,53 @@ namespace DATABANK.Controllers
 
                 idUsuario = Convert.ToInt32(Session["idUsuario"]);
                 dd = data.getProyectoBodega(idProyecto,idUsuario);
-                DataRow row = dd.Rows[0];
-                if (row["respuesta"].ToString() != "0")
+                DataRow row = null;
+                if (dd.Rows.Count > 0)
                 {
-                    DataTable dt = data.getDataProducto(Convert.ToInt32(dd.Rows[0]["idProducto"]));
-                    ViewBag.Producto = dt.Rows[0];
-                    dt = data.ObtenerData("SP_getUnidadMedida");
-                    ViewBag.ListaUnidadMedida = dt.Rows;
-                    dt = data.ObtenerData("SP_getBodega");
-                    ViewBag.ListaBodega = dt.Rows;
-                    dt = data.getEstado(2);
-                    ViewBag.ListaEstado = dt.Rows;
-                    dt = data.ObtenerData("SP_getCategoria");
-                    ViewBag.ListaCategoria = dt.Rows;
-                    dt = data.getListaInspección(idProyecto, idUsuario);
-                    ViewBag.ListaRuta = dt.Rows;
-                    return View("/Views/administrador/partialsInspeccion/create.cshtml");
+                    row = dd.Rows[0];
+                }
+                if (dd.Rows.Count > 0)
+                {
+                    if (row["respuesta"].ToString() != "0")
+                    {
+                        DataTable dt = data.getDataProducto(Convert.ToInt32(dd.Rows[0]["idProducto"]));
+                        ViewBag.Producto = dt.Rows[0];
+                        dt = data.ObtenerData("SP_getUnidadMedida");
+                        ViewBag.ListaUnidadMedida = dt.Rows;
+                        dt = data.ObtenerData("SP_getBodega");
+                        ViewBag.ListaBodega = dt.Rows;
+                        dt = data.getEstado(2);
+                        ViewBag.ListaEstado = dt.Rows;
+                        dt = data.ObtenerData("SP_getCategoria");
+                        ViewBag.ListaCategoria = dt.Rows;
+                        dt = data.getListaInspección(idProyecto, idUsuario);
+                        ViewBag.ListaRuta = dt.Rows;
+                        return View("/Views/administrador/partialsInspeccion/create.cshtml");
+                    }
+                    else
+                    {
+                        return RedirectToAction("ListaMaterialesInspeccion");
+                    }
                 }
                 else
                 {
-                    if (row["respuesta"].ToString() == "0")
+                    if (dd.Rows.Count > 0)
                     {
-                        TempData["message"] = "no se encuentra asignado a este inventario.";
-                        TempData["title"] = "Este Usuario";
-                        TempData["type"] = "error";
-                        return RedirectToAction("ListaMaterialesInspeccion");
+                        if (row["respuesta"].ToString() == "0")
+                        {
+                            TempData["message"] = "no se encuentra asignado a este inventario.";
+                            TempData["title"] = "Este Usuario";
+                            TempData["type"] = "error";
+                            return RedirectToAction("ListaMaterialesInspeccion");
+                        }
+                        else
+                        {
+                            DataTable dm = data.ActualizarEstadoProducto(idProyecto);
+                            TempData["message"] = "Inspección Terminada.";
+                            TempData["title"] = "Muy Bien.";
+                            TempData["type"] = "success";
+                            return RedirectToAction("ListaInspecciones");
+                        }
                     }
                     else
                     {
@@ -1258,9 +1241,18 @@ namespace DATABANK.Controllers
         {
             Session["alve"] = "config";
             ConnectionDataBase.StoreProcediur data = new ConnectionDataBase.StoreProcediur();
+            DataTable nn = null;
             int idUsuario = Convert.ToInt32(Session["idUsuario"]);
-            DataTable dp = data.getDataBodega(model.idBodega);
-            //int idProyecto = Convert.ToInt32(dp.Rows[0]["idProyecto"]);
+            if (model.idBodegaP != 0)
+            {
+                nn = data.saveProducto(idProyecto,model.idBodegaP,model.UbicacionP,model.codigoP, model.idUnidadMedidaP
+                    ,model.descripcionP,model.cantidadP,idUsuario);
+                if (nn.Rows.Count > 0)
+                {
+                    model.idProducto = Convert.ToInt32(nn.Rows[0]["idProducto"]);
+                }
+            }
+            
             DataTable dt = data.saveInspeccion(model,idProyecto);
             DataTable dm = data.ActualizarEstadoTemporal(model.idProducto, idUsuario,6, Convert.ToInt32(model.Conteo));
             DataRow row = dt.Rows[0];

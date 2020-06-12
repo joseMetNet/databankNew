@@ -1,0 +1,199 @@
+﻿@model DATABANK.Models.Producto
+@{
+    ViewBag.Title = "Creacion Empleado";
+    Layout = "~/Views/Shared/gestionView.cshtml";
+}
+
+<section class="section">
+    <h5 class="section-header">
+        Editar Material
+    </h5>
+</section>
+<div class="card">
+    <div class="card-header">
+        <div class="col-sm-12 row">
+            <small class="text-danger">Los campos con asteriscos son obligatorios.</small>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <form action="@Url.Action("saveProductoUpdate")" method="post" id="formsaveemployee" class="col-sm-12 row" enctype="multipart/form-data">
+                <input type="hidden" name="idProducto" value="@ViewBag.Producto["idProducto"]" />
+                <br>
+                <br>
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Bodega <span class="text-danger">*</span></label>
+                                <select name="idBodega" id="idBodega" class="form-control selectcount" required style="width:100%">
+                                    <option></option>
+                                    @foreach (var bodega in ViewBag.ListaBodega)
+                                    {
+                                        if (Convert.ToInt32(ViewBag.producto["idBodega"]) == bodega["idBodega"])
+                                        {
+                                            <option selected value="@bodega["idBodega"]">@bodega["NombreBodega"]</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@bodega["idBodega"]">@bodega["NombreBodega"]</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Código<span class="text-danger">*</span></label>
+                                <input type="text" name="codigo" required class="form-control form-control-sm" value="@ViewBag.producto["codigo"]">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Nombre Material<span class="text-danger">*</span></label>
+                                <input type="text" name="nombreProducto" class="form-control form-control-sm" value="@ViewBag.producto["nombreproducto"]" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Cantidad<span class="text-danger">*</span></label>
+                                <input type="text" name="Cantidad" class="form-control form-control-sm" value="@ViewBag.producto["Cantidad"]" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Unidad Medida <span class="text-danger">*</span></label>
+                                <select name="idUnidadMedida" class="form-control selectcount" required style="width:100%">
+                                    <option></option>
+                                    @foreach (var unidad in ViewBag.ListaUnidadMedida)
+                                    {
+                                        if (Convert.ToInt32(ViewBag.producto["idUnidadMedida"]) == unidad["idUnidadMedida"])
+                                        {
+                                            <option selected value="@unidad["idUnidadMedida"]">@unidad["UnidadMedida"]</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@unidad["idUnidadMedida"]">@unidad["UnidadMedida"]</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Ubicación<span class="text-danger">*</span></label>
+                                <input type="text" name="Ubicacion" class="form-control form-control-sm" value="@ViewBag.producto["Ubicacion"]" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Descripción<span class="text-danger">*</span></label>
+                                <textarea name="descripcion" class="form-control form-control-sm" required>@ViewBag.producto["descripcion"]</textarea>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Estado <span class="text-danger">*</span></label>
+                                <select name="idEstado" class="form-control selectcount" required style="width:100%">
+                                    <option></option>
+                                    @foreach (var estado in ViewBag.ListaEstado)
+                                    {
+                                        if (Convert.ToInt32(ViewBag.producto["idEstado"]) == @estado["idEstado"])
+                                        {
+                                            <option selected value="@estado["idEstado"]">@estado["estado"]</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@estado["idEstado"]">@estado["estado"]</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Operario <span class="text-danger">*</span></label>
+                                <select name="idUsuario" id="idUsuario" class="form-control selectcount" required style="width:100%"></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 text-center">
+                            <br><br>
+                            <div class="row">
+                                <div class="col-sm-6 text-right">
+                                    <div class="form-group">
+                                        <a href="@Url.Action("Productos")" class="btn btn-secondary" style="background-color:#94999c;border-color:#94999c">Cancelar</a>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 text-left">
+                                    <div class="form-group">
+                                        <input type="submit" value="Guardar Material" class="btn btn-danger" style="background-color:#01abe8;border-color:#01abe8">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section scripts{
+    @if (TempData["message"] != null)
+    {
+        <script type="text/javascript">
+            Swal.fire({
+                type: '@TempData["type"]',
+                title: '@TempData["title"]',
+                html: '@TempData["message"]',
+                showConfirmButton: false,
+                width: 300,
+                High: 300,
+                timer: 3000
+            })
+        </script>
+    }
+<script type="text/javascript">
+
+        $(".fijo").mask('000000000000000');
+        $("#phonee").mask('(000) 000-0000');
+        $(".selectcount").select2({
+            placeholder: "Seleccionar",
+            allowClear: true
+        })
+        $(".selectcount1").select2({
+            placeholder: "Seleccionar",
+            allowClear: true
+        })
+        $(".selectcount2").select2({
+            placeholder: "Seleccionar",
+            allowClear: true
+        });
+       
+        $("#idBodega").change(function () {
+            var koa = $(this).val();
+            if (parseInt(koa) > 0) {
+                $.get("/administrador/getUsuarioProyecto", { id: koa }, function (data) {
+                    data = $.parseJSON(data);
+                    $("#idUsuario").empty();
+                    $("#idUsuario").append("<option ></option>")
+                    $.each(data, function (index, row) {
+                        if (@ViewBag.producto["idUsuario"] == row.idUsuario)
+                            $("#idUsuario").append("<option selected value='" + row.idUsuario + "'>" + row.NombreUsuario + "</option>")
+                        else
+                            $("#idUsuario").append("<option  value='" + row.idUsuario + "'>" + row.NombreUsuario + "</option>")
+                    });
+                });
+                //$("#statuscontract").select2()
+            }
+            $("#idUsuario").empty();
+        });
+        $("#idBodega").val(@ViewBag.producto["idBodega"]).trigger("change");
+        $(document).ready(function () {
+            setTimeout($("#idUsuario").val(@ViewBag.producto["idUsuario"]).trigger("change")
+                , 10000);
+        });
+
+</script>
+}
+
+

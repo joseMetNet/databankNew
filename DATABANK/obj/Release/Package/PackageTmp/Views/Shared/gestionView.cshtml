@@ -1,0 +1,178 @@
+﻿<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" name="viewport">
+    <title>DataBank</title>
+
+    <link rel="stylesheet" href="~/Content/dist/modules/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Content/dist/modules/ionicons/css/ionicons.min.css">
+    <link rel="stylesheet" href="~/Content/dist/modules/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css">
+
+    <link rel="stylesheet" href="~/Content/dist/modules/summernote/summernote-lite.css">
+    <link rel="stylesheet" href="~/Content/dist/modules/flag-icon-css/css/flag-icon.min.css">
+    <link rel="stylesheet" href="~/Content/dist/css/demo.css">
+    <link rel="stylesheet" href="~/Content/dist/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/timepicker@1.11.15/jquery.timepicker.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style type="text/css">
+        .datepicker {
+            background-color: white !important;
+        }
+
+        .lineheight25 {
+            line-height: 25px !important;
+        }
+
+        .curpointer {
+            cursor: pointer !important;
+        }
+
+        .curdefault {
+            cursor: default !important;
+        }
+
+        .dropdown-item.active, .dropdown-item:active {
+            background-color: #01abe8 !important;
+        }
+        .form-control[readonly] {
+            background-color: #ffffff;
+        }
+
+        .select2-container--default .select2-selection--single {
+            background-color: #ffffff !important;
+        }
+    </style>
+    @RenderSection("css", false)
+</head>
+<body>
+
+    <div id="app" >
+        <div class="main-wrapper" >
+            <div class="navbar-bg" style="background-color:#434343"></div>
+            <nav class="navbar navbar-expand-lg main-navbar" style="background-color:#434343">
+                <form class="form-inline mr-auto">
+                    <ul class="navbar-nav mr-3">
+                        <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="ion ion-navicon-round"></i></a></li>
+                        <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i class="ion ion-search"></i></a></li>
+                    </ul>
+                </form>
+                <ul class="navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg">
+                            <i class="ion ion-android-person d-lg-none"></i>
+                            <div class="d-sm-none d-lg-inline-block">@Session["nombre"]</div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a href="@Url.Action("editUsuario", new { @id = Session["idUsuario"] })" class="dropdown-item has-icon">
+                                <i class="ion ion-android-person"></i> Perfil
+                            </a>
+                            <a href=@Url.Action("Logout") class="dropdown-item has-icon">
+                                <i class="ion ion-log-out"></i> Cerrar Sesión
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+            <div class="main-sidebar" style="width:210px;" >
+                <aside id="sidebar-wrapper">
+                    <br />
+                    <div class="sidebar-brand">
+                        <img src="~/Content/images/abacus.png" alt="" width="70%" />
+                    </div>
+                    <div class="sidebar-user">
+                        <div class="sidebar-user-picture">
+                            <img alt="image" src="@Session["imagen"]">
+                        </div>
+                        <div class="sidebar-user-details">
+                            <div class="user-name">@Session["nombre"]</div>
+                            <div class="user-role">
+                                @Session["perfil"]
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="sidebar-menu">
+                        <li class="menu-header">Dashboard</li>
+                        @{
+                            ViewBag.cosas = "";
+                            if (Session["alve"].ToString() == "dash")
+                            {
+                                ViewBag.cosas = "active";
+                            }
+                        }
+                        <li class="@ViewBag.cosas">
+                            <a href=@Url.Action("Dashboard", "administrador")><i class="ion ion-speedometer"></i><span>Dashboard</span></a>
+                        </li>
+                        @if (Convert.ToInt32(Session["idPerfil"]) == 1)
+                        {
+                            {
+                                ViewBag.cosas = ""; ViewBag.shows = "";
+                                if (Session["alve"].ToString() == "config")
+                                {
+                                    ViewBag.cosas = "active"; ViewBag.shows = "style=display:none;";
+                                }
+                            }
+                            <li class="@ViewBag.cosas">
+                                <a class="has-dropdown" href="#"><i class="ion ion-android-settings"></i><span>Maestro</span></a>
+                                <ul class="menu-dropdown" @ViewBag.shows>
+                                    <li><a href=@Url.Action("proyectos", "administrador")><i class="ion ion-document"></i> Proyectos</a></li>
+                                    <li><a href=@Url.Action("bodegas", "administrador")><i class="ion ion-grid"></i> Bodegas</a></li>
+                                    <li><a href=@Url.Action("usuarios", "administrador")><i class="ion ion-person"></i> Usuarios</a></li>
+                                    @*<li><a href=@Url.Action("productos", "administrador")><i class="ion ion-filing"></i> Materiales</a></li>*@
+                                    <li><a href=@Url.Action("CargarInfo", "administrador")><i class="ion ion-android-upload"></i>Inventario</a></li>
+                                </ul>
+                            </li>
+                            <li class="@ViewBag.cosas">
+                                <a class="has-dropdown" href="#"><i class="ion ion-clipboard"></i><span>Conteos</span></a>
+                                <ul class="menu-dropdown" @ViewBag.shows>
+                                    <li><a href=@Url.Action("ListaMaterialesInspeccion", "administrador")><i class="ion ion-ios-search-strong"></i> Inspeccionar</a></li>
+                                    <li><a href=@Url.Action("ListaInspecciones", "administrador")><i class="ion ion-folder"></i> Lista Inspecciones</a></li>
+                                </ul>
+                            </li>
+                        }
+                        @if (Convert.ToInt32(Session["idPerfil"]) == 2)
+                        {
+                            <li class="@ViewBag.cosas">
+                                <a class="has-dropdown" href="#"><i class="ion ion-clipboard"></i><span>Conteos</span></a>
+                                <ul class="menu-dropdown" @ViewBag.shows>
+                                    <li><a href=@Url.Action("ListaMaterialesInspeccion", "administrador")><i class="ion ion-ios-search-strong"></i> Inspeccionar</a></li>
+                                    <li><a href=@Url.Action("ListaInspecciones", "administrador")><i class="ion ion-folder"></i> Lista Inspecciones</a></li>
+                                </ul>
+                            </li>
+                        }
+                    </ul>
+                </aside>
+            </div>
+            <div class="main-content">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+    <script src="~/Content/dist/modules/jquery.min.js"></script>
+    <script src="~/Content/dist/modules/popper.js"></script>
+    <script src="~/Content/dist/modules/tooltip.js"></script>
+    <script src="~/Content/dist/modules/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/Content/dist/modules/nicescroll/jquery.nicescroll.min.js"></script>
+    <script src="~/Content/dist/modules/scroll-up-bar/dist/scroll-up-bar.min.js"></script>
+    <script src="~/Content/dist/js/sa-functions.js"></script>
+
+    <script src="~/Content/dist/modules/chart.min.js"></script>
+    <script src="~/Content/dist/modules/summernote/summernote-lite.js"></script>
+    <script src="~/Content/dist/js/scripts.js"></script>
+    <script src="~/Content/dist/js/custom.js"></script>
+    <script src="~/Content/dist/js/demo.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <script src="https://jqueryvalidation.org/files/dist/jquery.validate.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timepicker@1.11.15/jquery.timepicker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/es.js"></script>
+    <script src="//cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js" type="text/javascript"></script>
+    @RenderSection("scripts", false)
+    <script src="/Content/assets/js/main.js"></script>
+
+</body>
