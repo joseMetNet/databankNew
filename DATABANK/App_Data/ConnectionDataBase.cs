@@ -1085,7 +1085,7 @@ namespace DATABANK.App_Data
                     throw;
                 }
             }
-            public DataTable saveInspeccion(DATABANK.Models.Inspeccion model, int pidProyecto)
+            public DataTable saveInspeccion(DATABANK.Models.Inspeccion model, int pidProyecto, int pidOperario)
             {
                 try
                 {
@@ -1106,6 +1106,7 @@ namespace DATABANK.App_Data
                         da.SelectCommand.Parameters.Add("@pidCategoria", SqlDbType.Int).Value = model.idCategoria;
                     }
                     da.SelectCommand.Parameters.Add("@pconteo", SqlDbType.Int).Value = model.Conteo;
+                    da.SelectCommand.Parameters.Add("@pidOperario", SqlDbType.Int).Value = pidOperario;
                     da.SelectCommand.CommandType = CommandType.StoredProcedure;
                     DataTable dt = new DataTable();
                     da.Fill(dt);
@@ -1156,13 +1157,14 @@ namespace DATABANK.App_Data
                     throw;
                 }
             }
-            public DataTable getInspeccion(int pidInspeccion = 0)
+            public DataTable getInspeccion(int pidInspeccion = 0, int pidProyecto = 0)
             {
                 try
                 {
                     SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["CustomerDataConnectionString"].ConnectionString);
                     SqlDataAdapter da = new SqlDataAdapter("SP_getInspecciones", con);
                     da.SelectCommand.Parameters.Add("@pidInspeccion", SqlDbType.Int).Value = pidInspeccion;
+                    da.SelectCommand.Parameters.Add("@pidProyecto", SqlDbType.Int).Value = pidProyecto;
                     da.SelectCommand.CommandType = CommandType.StoredProcedure;
                     DataTable dt = new DataTable();
                     da.Fill(dt);

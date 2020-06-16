@@ -1252,8 +1252,8 @@ namespace DATABANK.Controllers
                     model.idProducto = Convert.ToInt32(nn.Rows[0]["idProducto"]);
                 }
             }
-            
-            DataTable dt = data.saveInspeccion(model,idProyecto);
+            int idOperario = Convert.ToInt32(Session["idUsuario"]);
+            DataTable dt = data.saveInspeccion(model,idProyecto, idOperario);
             DataTable dm = data.ActualizarEstadoTemporal(model.idProducto, idUsuario,6, Convert.ToInt32(model.Conteo));
             DataRow row = dt.Rows[0];
             var nomaas = Request.Files;
@@ -1292,7 +1292,7 @@ namespace DATABANK.Controllers
             else
                 return RedirectToAction("crearInspeccion", new { @id = idProyecto });
         }
-        public ActionResult ListaInspecciones()
+        public ActionResult ListaInspecciones(int idProyecto = 0)
         {
             Session["alve"] = "config";
             ViewBag.valos = "Config";
@@ -1300,9 +1300,10 @@ namespace DATABANK.Controllers
                 return RedirectToAction("Index", "Home");
 
             ConnectionDataBase.StoreProcediur data = new ConnectionDataBase.StoreProcediur();
-            DataTable dt = data.getInspeccion();
+            DataTable dt = data.getInspeccion(0,idProyecto);
             ViewBag.inspeccion = dt.Rows;
-
+            dt = data.getDataProyecto();
+            ViewBag.proyecto = dt.Rows;
             return View("/Views/administrador/partialsInspeccion/table.cshtml");
         }
         public ActionResult showInspeccion(int id)
