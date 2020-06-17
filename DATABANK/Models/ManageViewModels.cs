@@ -36,6 +36,7 @@ namespace DATABANK.Models
         public byte[] passwordEncriptado { get; set; }
         public int idEstado { get; set; }
         public string imagen { get; set; }
+        public string codigo { get; set; }
 
     }
     public class Bodega

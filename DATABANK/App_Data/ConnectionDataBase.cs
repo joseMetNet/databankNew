@@ -146,6 +146,7 @@ namespace DATABANK.App_Data
                     da.SelectCommand.Parameters.Add("@pkey", SqlDbType.VarBinary).Value = pKEY;
                     da.SelectCommand.Parameters.Add("@piv", SqlDbType.VarBinary).Value = pIV;
                     da.SelectCommand.Parameters.Add("@pidEstado", SqlDbType.Int).Value = 1;
+                    da.SelectCommand.Parameters.Add("@pCodigo", SqlDbType.VarChar).Value = model.codigo;
                     da.SelectCommand.CommandType = CommandType.StoredProcedure;
                     DataTable dt = new DataTable();
                     da.Fill(dt);

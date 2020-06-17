@@ -26,6 +26,17 @@ namespace DATABANK.Controllers
             ConnectionDataBase.StoreProcediur data = new ConnectionDataBase.StoreProcediur();
             return View("/Views/administrador/Dashboard.cshtml");
         }
+        public ActionResult Reportes()
+        {
+            Session["alve"] = "dash";
+            if (Convert.ToInt32(Session["idUsuario"]) <= 0)
+            {
+                return RedirectToAction("Logout");
+            }
+
+            ConnectionDataBase.StoreProcediur data = new ConnectionDataBase.StoreProcediur();
+            return View("/Views/administrador/partialsReportes/Reporte1.cshtml");
+        }
         public ActionResult Logout()
         {
             ConnectionDataBase.StoreProcediur data = new ConnectionDataBase.StoreProcediur();
@@ -488,6 +499,8 @@ namespace DATABANK.Controllers
             ViewBag.TL = dt.Rows;
             dt = data.ObtenerData("SP_getLineasContadas");
             ViewBag.LC = dt.Rows;
+            dt = data.ObtenerData("SP_getLineasAsignadas");
+            ViewBag.LA = dt.Rows;
             return View("/Views/administrador/partialsProyecto/table.cshtml");
         }
         public ActionResult createProyectos()

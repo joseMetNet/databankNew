@@ -55,48 +55,57 @@
                             <td class="text-center">@proyecto["municipio"]</td>
                             <td class="text-center">
                                 @{
-                                    ViewBag.Variable = 1;
-                                    ViewBag.Cero = 0;
+                                    ViewBag.Variable = 0;
                                 }
                                 @if (ViewBag.TL.Count > 0)
                                 {
                                     foreach (var rowc in ViewBag.TL)
                                     {
-                                        if (ViewBag.Variable == 1)
+                                        if (rowc["idProyecto"].ToString() == proyecto["idProyecto"].ToString())
                                         {
-                                            if (rowc["idProyecto"].ToString() == proyecto["idProyecto"].ToString())
-                                            {
-                                                <a class="text-default font-weight-semibold text-uppercase">
-                                                    @rowc["TL"]
-                                                </a>
-                                                //ViewBag.Variable = ViewBag.Variable + 1;
-                                                //ViewBag.Cero = 1;
-                                            }
-                                            @*else
-                                            {
-                                                if (ViewBag.Cero == 0)
-                                                {
-                                                    <a class="text-default font-weight-semibold text-uppercase">
-                                                        0
-                                                    </a>
-                                                    ViewBag.Cero = ViewBag.Cero + 1;
-                                                }
-                                            }*@
+                                            ViewBag.Variable = @rowc["TL"];
                                         }
                                     }
+                                    if (ViewBag.Variable != 0)
+                                    {
+                                        <a class="text-default font-weight-semibold text-uppercase">
+                                            @ViewBag.Variable
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a class="text-default font-weight-semibold text-uppercase">
+                                            0
+                                        </a>
+                                    }
+
                                 }
+
                             </td>
                             <td class="text-center">
+                                @{
+                                    ViewBag.Variable = 0;
+                                }
                                 @if (ViewBag.LC.Count > 0)
                                 {
                                     foreach (var rowc in ViewBag.LC)
                                     {
                                         if (rowc["idProyecto"].ToString() == proyecto["idProyecto"].ToString())
                                         {
-                                            <a class="text-default font-weight-semibold text-uppercase">
-                                                @rowc["LC"]
-                                            </a>
+                                            ViewBag.Variable = @rowc["LC"];
                                         }
+                                    }
+                                    if (ViewBag.Variable != 0)
+                                    {
+                                        <a class="text-default font-weight-semibold text-uppercase">
+                                            @ViewBag.Variable
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a class="text-default font-weight-semibold text-uppercase">
+                                            0
+                                        </a>
                                     }
                                 }
                             </td>

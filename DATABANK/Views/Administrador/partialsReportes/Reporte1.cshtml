@@ -3,15 +3,58 @@
     Layout = "~/Views/Shared/gestionView.cshtml";
 }
 
+<section class="section">
+    <h5 class="section-header">
+        Dashboard
+    </h5>
+</section>
+<div class="card">
+    <div class="card-body">
+        <form id="asda" action="@Url.Action("Dashboard")" method="get">
+            <div class="row">
+                <div class="col-sm-3">
+                    <label><b>Fecha inicial:</b></label>
+                    <input type="text" id="fechainicial" name="fechainicial" class="form-control datepicker form-control-sm" />
+                </div>
+                <div class="col-sm-3">
+                    <label><b>Fecha final:</b></label>
+                    <input type="text" id="fechafinal" name="fechafinal" class="form-control datepicker form-control-sm" />
+                </div>
+                <div class="text-center">
+                    <label class="" d-block><b>&nbsp;</b></label>
+                    <input type="submit" value="Filtrar" class="btn btn-danger btn-block btn-sm " style="background-color:#01abe8;border-color:#01abe8"/>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 <div class="card">
     <div class="card-body">
         <div class="row">
-            <div class="col-sm-12 text-left">
-                <img src="~/Content/images/abacusDasboard.png" alt="" width="100%" />
+            <div class="col-12 col-md-6 col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Curva "S" Inventario Fiscal</h4>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="myChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Conciliación de Diferencias</h4>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="myChart2"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
 @section scripts{
 
     @if (TempData["message"] != null)

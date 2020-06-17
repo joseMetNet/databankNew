@@ -3198,6 +3198,7 @@
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\images\1.png" />
     <Content Include="Content\images\abacus.png" />
+    <Content Include="Content\images\abacusDasboard.png" />
     <Content Include="Content\images\admin.png" />
     <Content Include="Content\images\almacen.png" />
     <Content Include="Content\images\databank.png" />
@@ -3591,7 +3592,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\forgotYourPassword.cshtml" />
     <Content Include="Views\Home\actualizarContrasena.cshtml" />
-    <Content Include="Views\Administrador\Dashboard.cshtml" />
+    <Content Include="Views\Administrador\partialsReportes\Reporte1.cshtml" />
     <Content Include="Views\Shared\gestionView.cshtml" />
     <Content Include="Views\Administrador\partialsUsuario\create.cshtml" />
     <Content Include="Views\Administrador\partialsUsuario\edit.cshtml" />
@@ -3612,6 +3613,7 @@
     <Content Include="Views\Administrador\partialsInspeccion\table.cshtml" />
     <Content Include="Views\Administrador\partialsInspeccion\Inspeccion.cshtml" />
     <Content Include="Views\Administrador\partialsInspeccion\show.cshtml" />
+    <Content Include="Views\Administrador\Dashboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\img\" />
