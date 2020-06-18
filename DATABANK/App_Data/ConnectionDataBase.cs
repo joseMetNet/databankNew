@@ -209,7 +209,8 @@ namespace DATABANK.App_Data
                     da.SelectCommand.Parameters.Add("@pcontrasena", SqlDbType.VarBinary).Value = model.passwordEncriptado;
                     da.SelectCommand.Parameters.Add("@pkey", SqlDbType.VarBinary).Value = pKEY;
                     da.SelectCommand.Parameters.Add("@piv", SqlDbType.VarBinary).Value = pIV;
-                    da.SelectCommand.Parameters.Add("@pidEstado", SqlDbType.Int).Value = 1;
+                    da.SelectCommand.Parameters.Add("@pidEstado", SqlDbType.Int).Value = model.idEstado;
+                    da.SelectCommand.Parameters.Add("@pCodigo", SqlDbType.VarChar).Value = model.codigo;
                     da.SelectCommand.CommandType = CommandType.StoredProcedure;
                     DataTable dt = new DataTable();
                     da.Fill(dt);
@@ -312,6 +313,25 @@ namespace DATABANK.App_Data
                     SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["CustomerDataConnectionString"].ConnectionString);
                     SqlDataAdapter da = new SqlDataAdapter("SP_getListaInspección", con);
                     da.SelectCommand.Parameters.Add("@pidUsuario", SqlDbType.Int).Value = pidUsuario;
+                    da.SelectCommand.Parameters.Add("@pidProyecto", SqlDbType.Int).Value = pidProyecto;
+                    da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    return dt;
+
+                }
+                catch (Exception e)
+                {
+
+                    string sas = e.Message; throw;
+                }
+            }
+            public DataTable getUbicacionAuxiliar(int pidProyecto = 0)
+            {
+                try
+                {
+                    SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["CustomerDataConnectionString"].ConnectionString);
+                    SqlDataAdapter da = new SqlDataAdapter("SP_getUbicacionAuxiliar", con);
                     da.SelectCommand.Parameters.Add("@pidProyecto", SqlDbType.Int).Value = pidProyecto;
                     da.SelectCommand.CommandType = CommandType.StoredProcedure;
                     DataTable dt = new DataTable();

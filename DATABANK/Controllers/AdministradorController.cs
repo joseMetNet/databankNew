@@ -1185,14 +1185,10 @@ namespace DATABANK.Controllers
 
                 idUsuario = Convert.ToInt32(Session["idUsuario"]);
                 dd = data.getProyectoBodega(idProyecto,idUsuario);
-                DataRow row = null;
-                if (dd.Rows.Count > 0)
+                DataRow row = dd.Rows[0];
+                if (row["respuesta"].ToString() != "0")
                 {
-                    row = dd.Rows[0];
-                }
-                if (dd.Rows.Count > 0)
-                {
-                    if (row["respuesta"].ToString() != "0")
+                    if (dd.Rows.Count > 0)
                     {
                         DataTable dt = data.getDataProducto(Convert.ToInt32(dd.Rows[0]["idProducto"]));
                         ViewBag.Producto = dt.Rows[0];
@@ -1206,32 +1202,26 @@ namespace DATABANK.Controllers
                         ViewBag.ListaCategoria = dt.Rows;
                         dt = data.getListaInspección(idProyecto, idUsuario);
                         ViewBag.ListaRuta = dt.Rows;
+                        dt = data.getUbicacionAuxiliar(idProyecto);
+                        ViewBag.ListaUbicacionAuxiliar = dt.Rows;
                         return View("/Views/administrador/partialsInspeccion/create.cshtml");
                     }
                     else
                     {
+                        TempData["message"] = "no se encuentra asignado a este inventario.";
+                        TempData["title"] = "Este Usuario";
+                        TempData["type"] = "error";
                         return RedirectToAction("ListaMaterialesInspeccion");
                     }
                 }
                 else
                 {
-                    if (dd.Rows.Count > 0)
+                    if (row["respuesta"].ToString() == "0")
                     {
-                        if (row["respuesta"].ToString() == "0")
-                        {
-                            TempData["message"] = "no se encuentra asignado a este inventario.";
-                            TempData["title"] = "Este Usuario";
-                            TempData["type"] = "error";
-                            return RedirectToAction("ListaMaterialesInspeccion");
-                        }
-                        else
-                        {
-                            DataTable dm = data.ActualizarEstadoProducto(idProyecto);
-                            TempData["message"] = "Inspección Terminada.";
-                            TempData["title"] = "Muy Bien.";
-                            TempData["type"] = "success";
-                            return RedirectToAction("ListaInspecciones");
-                        }
+                        TempData["message"] = "no se encuentra asignado a este inventario.";
+                        TempData["title"] = "Este Usuario";
+                        TempData["type"] = "error";
+                        return RedirectToAction("ListaMaterialesInspeccion");
                     }
                     else
                     {
@@ -1262,7 +1252,18 @@ namespace DATABANK.Controllers
                     ,model.descripcionP,model.cantidadP,idUsuario);
                 if (nn.Rows.Count > 0)
                 {
-                    model.idProducto = Convert.ToInt32(nn.Rows[0]["idProducto"]);
+                    if(nn.Rows[0]["respuesta"].ToString() != "0")
+                    {
+                        model.idProducto = Convert.ToInt32(nn.Rows[0]["idProducto"]);
+                    }
+                    else
+                    {
+                        TempData["message"] = "de el producto que acaba de ingresar ya se encuentra registrado en el sistema";
+                        TempData["title"] = "El Código";
+                        TempData["type"] = "error";
+                        return RedirectToAction("crearInspeccion", new { @id = idProyecto });
+
+                    }
                 }
             }
             int idOperario = Convert.ToInt32(Session["idUsuario"]);

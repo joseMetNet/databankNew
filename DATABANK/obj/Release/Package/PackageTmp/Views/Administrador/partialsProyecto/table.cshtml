@@ -26,8 +26,10 @@
                             <th class="text-center">Cliente</th>
                             <th class="text-center">Departamento</th>
                             <th class="text-center">Municipio</th>
-                            <th class="text-center">Total Lineas</th>
-                            <th class="text-center">Lineas Contadas</th>
+                            <th class="text-center">LNS.</th>
+                            <th class="text-center">LNS.ASG.</th>
+                            <th class="text-center">LN.CTD.</th>
+                            <th class="text-center">AVANCE CTD.</th>
                             <th class="text-center">Estado</th>
                             <th class="text-center" style="width:15%">Operación</th>
                         </tr>
@@ -84,21 +86,21 @@
                             </td>
                             <td class="text-center">
                                 @{
-                                    ViewBag.Variable = 0;
+                                    ViewBag.Variable1 = 0;
                                 }
-                                @if (ViewBag.LC.Count > 0)
+                                @if (ViewBag.LA.Count > 0)
                                 {
-                                    foreach (var rowc in ViewBag.LC)
+                                    foreach (var rowc in ViewBag.LA)
                                     {
                                         if (rowc["idProyecto"].ToString() == proyecto["idProyecto"].ToString())
                                         {
-                                            ViewBag.Variable = @rowc["LC"];
+                                            ViewBag.Variable1 = @rowc["LA"];
                                         }
                                     }
-                                    if (ViewBag.Variable != 0)
+                                    if (ViewBag.Variable1 != 0)
                                     {
                                         <a class="text-default font-weight-semibold text-uppercase">
-                                            @ViewBag.Variable
+                                            @ViewBag.Variable1
                                         </a>
                                     }
                                     else
@@ -109,7 +111,78 @@
                                     }
                                 }
                             </td>
-                            <td class="text-center">@proyecto["estado"]</td>
+                            <td class="text-center">
+                                @{
+                                    ViewBag.Variable2 = 0;
+                                }
+                                @if (ViewBag.LC.Count > 0)
+                                {
+                                    foreach (var rowc in ViewBag.LC)
+                                    {
+                                        if (rowc["idProyecto"].ToString() == proyecto["idProyecto"].ToString())
+                                        {
+                                            ViewBag.Variable2 = @rowc["LC"];
+                                        }
+                                    }
+                                    if (ViewBag.Variable2 != 0)
+                                    {
+                                        <a class="text-default font-weight-semibold text-uppercase">
+                                            @ViewBag.Variable2
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a class="text-default font-weight-semibold text-uppercase">
+                                            0
+                                        </a>
+                                    }
+                                }
+                            </td>
+                            <td class="text-center">
+                                @{
+                                    ViewBag.Variable3 = 0;
+                                    ViewBag.Total = 0;
+
+                                    if (@ViewBag.Variable != 0)
+                                    {
+                                        if (@ViewBag.Variable1 != 0)
+                                        {
+                                            ViewBag.Variable3 = Convert.ToDecimal(@ViewBag.Variable1) / Convert.ToDecimal(@ViewBag.Variable);
+                                            ViewBag.Variable4 = Convert.ToDecimal(@ViewBag.Variable3) * 100;
+                                        }
+                                        else
+                                        {
+                                            ViewBag.Variable4 = 0;
+                                        }
+                                    }
+                                }
+                                @if (ViewBag.Variable4 != 0)
+                                {
+                                    <a class="text-default font-weight-semibold text-uppercase">
+                                        @(Convert.ToInt32(@ViewBag.Variable4)) %
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a class="text-default font-weight-semibold text-uppercase">
+                                        0 %
+                                    </a>
+                                }
+                            </td>
+                            <td class="text-center">
+                                @if (ViewBag.Variable4 == 100)
+                                {
+                                    <a class="text-default font-weight-semibold">
+                                        Terminado
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a class="text-default font-weight-semibold">
+                                        En Curso
+                                    </a>
+                                }
+                            </td>
                             <td class="p-1 text-center">
                                 <a data-href="@Url.Action("editProyecto", new { @id=proyecto["idProyecto"]})" class="btn btn-danger btn-action mr-1 editUser" title="Editar Proyecto" style="background-color:#01abe8;border-color:#01abe8"><i class="fa fa-edit"></i></a>
                                 @if (Convert.ToInt32(proyecto["idEstado"]) == 1)

@@ -54,7 +54,7 @@
                                         <input type="text" name="nombreProducto" class="form-control form-control-sm" value="@ViewBag.producto["Descripcion"]" readonly>
                                     </div>
                                 </div>
-                                @if (Convert.ToInt32(Session["idPerfil"]) == 1)
+                                @*@if (Convert.ToInt32(Session["idPerfil"]) == 1)
                                 {
                                     <div class="col-sm-6">
                                         <div class="form-group">
@@ -62,7 +62,7 @@
                                             <input type="text" name="Cantidad" class="form-control form-control-sm" value="@ViewBag.producto["QTY"]" readonly>
                                         </div>
                                     </div>
-                                }
+                                }*@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>Unidad Medida <span class="text-danger">*</span></label>
@@ -200,7 +200,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <label>Estado <span class="text-danger">*</span></label>
-                                        <select name="idEstado" class="form-control selectcount1"  required style="width:100%">
+                                        <select name="idEstado" id="estado" class="form-control selectcount1"  required style="width:100%">
                                             <option></option>
                                             @foreach (var estado in ViewBag.ListaEstado)
                                             {
@@ -357,6 +357,7 @@
             else
                 $(".categoria").addClass("d-none")
         });
+
         $('#addimagebutton').click(function () {
             var ranos = "nada" + Math.floor(Math.random() * 1000)
             var htmls = "<div class=\"col-md-4\">";

@@ -191,16 +191,22 @@
                                         <textarea name="Observacion" class="form-control form-control-sm"></textarea>
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-4 ocultar">
                                     <div class="form-group">
                                         <label>Ubicación Auxiliar</label>
-                                        <input type="text" name="ubicacionAuxiliar" class="form-control form-control-sm">
+                                        <select name="ubicacionAuxiliar" class="form-control selectcount1" required style="width:100%">
+                                            <option></option>
+                                            @foreach (var ubicacion in ViewBag.ListaUbicacionAuxiliar)
+                                            {
+                                                <option value="@ubicacion["ubicacionAuxiliar"]">@ubicacion["ubicacionAuxiliar"]</option>
+                                            }
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <label>Estado <span class="text-danger">*</span></label>
-                                        <select name="idEstado" id="estado" class="form-control selectcount1"  required style="width:100%">
+                                        <select name="idEstado" id="estado" class="form-control selectcount1" required style="width:100%">
                                             <option></option>
                                             @foreach (var estado in ViewBag.ListaEstado)
                                             {
@@ -221,11 +227,14 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-2">
                                     <div class="form-group">
                                         <label>Conteo<span class="text-danger">*</span></label>
-                                        <input type="text" name="conteo" id="numero" class="form-control form-control-sm" required>
+                                        <input type="text" name="conteo" id="numero" class="form-control form-control-sm conteo" required>
                                     </div>
+                                </div>
+                                <div class="col-sm-2 text-center" id="mostrar">
+
                                 </div>
                                 <div class="col-sm-12" id="contenerimg">
                                     <div class="col-md-4 align-self-center">
@@ -244,12 +253,12 @@
                                         </div>
                                         <div class="col-sm-4 text-center">
                                             <div class="form-group">
-                                                <button type="button" class="btn  btn-sm btn-dark" data-toggle="modal" id="fueraderuta" data-target="#FueraRuta">Fuera de Ruta</button>
+                                                <button type="button" class="btn  btn-sm btn-dark" data-toggle="modal" id="fueraderuta" name="fueraruta" data-target="#FueraRuta">Fuera de Ruta</button>
                                             </div>
                                         </div>
                                         <div class="col-sm-5">
                                             <div class="form-group">
-                                                <input type="submit" value="Siguiente Inspección" class="btn btn-sm btn-danger" style="background-color:#01abe8;border-color:#01abe8">
+                                                <input type="submit" value="Siguiente Inspección" class="btn btn-sm btn-danger" style="background-color:#01abe8;border-color:#01abe8" name="fueraruta">
                                             </div>
                                         </div>
                                     </div>
@@ -336,7 +345,7 @@
         })
         </script>
     }
-    <script type="text/javascript">
+<script type="text/javascript">
         $(".fijo").mask('000000000000000');
         $("#phonee").mask('(000) 000-0000');
         $(".selectcount").select2({
@@ -396,12 +405,37 @@
         $("#fueraderuta").on("click", function () {
             $('.1').hide();
             $('.2').show();
+            $('.ocultar').hide();
         });
         $(document).ready(function () {
             $('.1').show();
             $('.2').hide();
         });
-    </script>
+        $(".conteo").keyup(function () {
+             var asd = $('input:text[name=conteo]').val();
+             var htmls = "";
+            var color = "";
+            if (asd.length == 0) {
+                $("#mostrar").html("");
+            }
+            else {
+                $("#mostrar").html("");
+                if (asd == @ViewBag.producto["QTY"]) {
+                    color = "bg-success";
+                }
+                else if (asd < @ViewBag.producto["QTY"]) {
+                    color = "bg-danger";
+                 }
+             else if (asd > @ViewBag.producto["QTY"]){
+                    color = "bg-warning";
+                }
+                htmls += '<label class="d-lg-table-row">&nbsp;</label><a class="' + color +' btn btn-sm h-25 p-3 rounded-circle w-25 p-3"></a>';
+                $("#mostrar").append(htmls);
+            }
+
+            
+        });
+</script>
 }
 
 
