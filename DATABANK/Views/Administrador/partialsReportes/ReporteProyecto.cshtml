@@ -5,20 +5,22 @@
 
 <section class="section">
     <h5 class="section-header">
-        Reporte 1
+        Reporte Por Proyecto
     </h5>
 </section>
 <div class="card">
     <div class="card-body">
-        <form id="asda" action="@Url.Action("Dashboard")" method="get">
+        <form id="asda" action="@Url.Action("Reporte Proyecto")" method="get">
             <div class="row">
                 <div class="col-sm-3">
-                    <label><b>Fecha inicial:</b></label>
-                    <input type="text" id="fechainicial" name="fechainicial" class="form-control datepicker form-control-sm" />
-                </div>
-                <div class="col-sm-3">
-                    <label><b>Fecha final:</b></label>
-                    <input type="text" id="fechafinal" name="fechafinal" class="form-control datepicker form-control-sm" />
+                    <label>Proyecto <span class="text-danger">*</span></label>
+                    <select name="idProyecto" class="form-control selectcount" required style="width:100%">
+                        <option></option>
+                        @foreach (var proyecto in ViewBag.ListaProyecto)
+                        {
+                            <option value="@proyecto["idProyecto"]">@proyecto["NombreProyecto"]</option>
+                        }
+                    </select>
                 </div>
                 <div class="text-center">
                     <label class="" d-block><b>&nbsp;</b></label>
@@ -31,20 +33,10 @@
 <div class="card">
     <div class="card-body">
         <div class="row">
-            <div class="col-12 col-md-6 col-lg-6">
+            <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Curva "S" Inventario Fiscal</h4>
-                    </div>
-                    <div class="card-body">
-                        <canvas id="myChart"></canvas>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-6 col-lg-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h4>Conciliación de Diferencias</h4>
+                        <h4>Conteos Detallado Por Bodegas</h4>
                     </div>
                     <div class="card-body">
                         <canvas id="myChart2"></canvas>
@@ -72,67 +64,11 @@
     }
     <script src="../dist/modules/chart.min.js"></script>
     <script>
-        $(".datepicker").flatpickr({
-            dateFormat: "Y-m-d",
-            "locale": "es",
-            //enableTime: false,
-            //minDate:new Date()
-        });
-
-        var dateToday = new Date();
-        $(".datepickers").datepicker({
-            format: 'yyyy-mm-dd',
-            autoclose: true,
-        });
+        $(".selectcount").select2({
+            placeholder: "Seleccionar",
+            allowClear: true
+        })
         var MONTHS = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre ', 'Diciembre'];
-        var ctx = document.getElementById("myChart").getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio'],
-                datasets: [{
-                    label: 'Total Lineas',
-                    data: [460, 458, 330, 502, 430, 610, 488],
-                    borderWidth: 2,
-                    borderColor: '#01abe8',
-                    borderWidth: 2.5,
-                    pointBackgroundColor: '#ffffff',
-                    pointRadius: 4
-                },
-                {
-                    label: 'Lineas Contadas',
-                    data: [300, 440, 310, 602, 440, 620, 388],
-                    borderWidth: 2,
-                    borderColor: '#94999c',
-                    borderWidth: 2.5,
-                    pointBackgroundColor: '#ffffff',
-                    pointRadius: 4
-                }]
-            },
-            
-            options: {
-                legend: {
-                    display: false
-                },
-                scales: {
-                    xAxes: [{
-                        display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Mes'
-                        }
-                    }],
-                    yAxes: [{
-                        display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Cantidad'
-                        }
-                    }]
-                }
-            }
-        });
-
         var ctx = document.getElementById("myChart2").getContext('2d');
         var myChart = new Chart(ctx, {
             type: 'bar',
@@ -150,10 +86,20 @@
                 },
                 {
                     label: 'Lineas Contadas',
-                    data: [300, 440, 310, 602, 440, 620, 388],
+                    data: [400, 440, 310, 602, 440, 620, 388],
                     borderWidth: 2,
                     backgroundColor: '#94999c',
                     borderColor: '#94999c',
+                    borderWidth: 2.5,
+                    pointBackgroundColor: '#ffffff',
+                    pointRadius: 4
+                },
+                {
+                    label: 'Lineas Contadas',
+                    data: [420, 430, 320, 622, 35, 610, 398],
+                    borderWidth: 2,
+                    backgroundColor: '#f0f0f0',
+                    borderColor: '#f0f0f0',
                     borderWidth: 2.5,
                     pointBackgroundColor: '#ffffff',
                     pointRadius: 4

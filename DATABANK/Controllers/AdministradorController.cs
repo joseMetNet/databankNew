@@ -37,6 +37,19 @@ namespace DATABANK.Controllers
             ConnectionDataBase.StoreProcediur data = new ConnectionDataBase.StoreProcediur();
             return View("/Views/administrador/partialsReportes/Reporte1.cshtml");
         }
+        public ActionResult ReporteProyecto()
+        {
+            Session["alve"] = "dash";
+            if (Convert.ToInt32(Session["idUsuario"]) <= 0)
+            {
+                return RedirectToAction("Logout");
+            }
+
+            ConnectionDataBase.StoreProcediur data = new ConnectionDataBase.StoreProcediur();
+            DataTable dt = data.getDataProyecto();
+            ViewBag.ListaProyecto = dt.Rows;
+            return View("/Views/administrador/partialsReportes/ReporteProyecto.cshtml");
+        }
         public ActionResult Logout()
         {
             ConnectionDataBase.StoreProcediur data = new ConnectionDataBase.StoreProcediur();
@@ -1179,16 +1192,14 @@ namespace DATABANK.Controllers
             {
                 idProyecto = id;
             }
-
             if (idProyecto > 0)
             {
-
                 idUsuario = Convert.ToInt32(Session["idUsuario"]);
-                dd = data.getProyectoBodega(idProyecto,idUsuario);
-                DataRow row = dd.Rows[0];
-                if (row["respuesta"].ToString() != "0")
+                dd = data.getProyectoBodega(idProyecto, idUsuario);
+                if(dd.Rows.Count > 0)
                 {
-                    if (dd.Rows.Count > 0)
+                    DataRow row = dd.Rows[0];
+                    if (row["respuesta"].ToString() != "0")
                     {
                         DataTable dt = data.getDataProducto(Convert.ToInt32(dd.Rows[0]["idProducto"]));
                         ViewBag.Producto = dt.Rows[0];
@@ -1200,10 +1211,14 @@ namespace DATABANK.Controllers
                         ViewBag.ListaEstado = dt.Rows;
                         dt = data.ObtenerData("SP_getCategoria");
                         ViewBag.ListaCategoria = dt.Rows;
-                        dt = data.getListaInspección(idProyecto, idUsuario);
-                        ViewBag.ListaRuta = dt.Rows;
                         dt = data.getUbicacionAuxiliar(idProyecto);
                         ViewBag.ListaUbicacionAuxiliar = dt.Rows;
+                        dt = data.getListaInspección(idProyecto, idUsuario);
+                        ViewBag.ListaRuta = dt.Rows;
+                        dt = data.getListaInspecciónContadas(idProyecto, idUsuario);
+                        ViewBag.ListaRutaContadas = dt.Rows;
+                        dt = data.getListaInspecciónFaltantes(idProyecto, idUsuario);
+                        ViewBag.ListaRutaFaltantes = dt.Rows;
                         return View("/Views/administrador/partialsInspeccion/create.cshtml");
                     }
                     else
@@ -1216,28 +1231,19 @@ namespace DATABANK.Controllers
                 }
                 else
                 {
-                    if (row["respuesta"].ToString() == "0")
-                    {
-                        TempData["message"] = "no se encuentra asignado a este inventario.";
-                        TempData["title"] = "Este Usuario";
-                        TempData["type"] = "error";
-                        return RedirectToAction("ListaMaterialesInspeccion");
-                    }
-                    else
-                    {
-                        DataTable dm = data.ActualizarEstadoProducto(idProyecto);
-                        TempData["message"] = "Inspección Terminada.";
-                        TempData["title"] = "Muy Bien.";
-                        TempData["type"] = "success";
-                        return RedirectToAction("ListaInspecciones");
-                    }
+                    DataTable dm = data.ActualizarEstadoProducto(idProyecto);
+                    TempData["message"] = "Inspección Terminada.";
+                    TempData["title"] = "Muy Bien.";
+                    TempData["type"] = "success";
+                    return RedirectToAction("ListaInspecciones");
                 }
+
             }
             else
             {
                 return RedirectToAction("ListaMaterialesInspeccion");
             }
-            
+
         }
         
         public ActionResult saveInspeccion(Models.Inspeccion model, int idProyecto = 0)

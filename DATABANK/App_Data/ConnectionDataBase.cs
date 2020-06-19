@@ -326,6 +326,46 @@ namespace DATABANK.App_Data
                     string sas = e.Message; throw;
                 }
             }
+            public DataTable getListaInspecciónContadas(int pidProyecto = 0, int pidUsuario = 0)
+            {
+                try
+                {
+                    SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["CustomerDataConnectionString"].ConnectionString);
+                    SqlDataAdapter da = new SqlDataAdapter("SP_getListaInspecciónContadas", con);
+                    da.SelectCommand.Parameters.Add("@pidUsuario", SqlDbType.Int).Value = pidUsuario;
+                    da.SelectCommand.Parameters.Add("@pidProyecto", SqlDbType.Int).Value = pidProyecto;
+                    da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    return dt;
+
+                }
+                catch (Exception e)
+                {
+
+                    string sas = e.Message; throw;
+                }
+            }
+            public DataTable getListaInspecciónFaltantes(int pidProyecto = 0, int pidUsuario = 0)
+            {
+                try
+                {
+                    SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["CustomerDataConnectionString"].ConnectionString);
+                    SqlDataAdapter da = new SqlDataAdapter("SP_getListaInspecciónFaltantes", con);
+                    da.SelectCommand.Parameters.Add("@pidUsuario", SqlDbType.Int).Value = pidUsuario;
+                    da.SelectCommand.Parameters.Add("@pidProyecto", SqlDbType.Int).Value = pidProyecto;
+                    da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    return dt;
+
+                }
+                catch (Exception e)
+                {
+
+                    string sas = e.Message; throw;
+                }
+            }
             public DataTable getUbicacionAuxiliar(int pidProyecto = 0)
             {
                 try

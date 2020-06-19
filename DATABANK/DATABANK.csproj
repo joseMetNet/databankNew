@@ -3614,6 +3614,7 @@
     <Content Include="Views\Administrador\partialsInspeccion\Inspeccion.cshtml" />
     <Content Include="Views\Administrador\partialsInspeccion\show.cshtml" />
     <Content Include="Views\Administrador\Dashboard.cshtml" />
+    <Content Include="Views\Administrador\partialsReportes\ReporteProyecto.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\img\" />

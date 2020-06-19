@@ -191,16 +191,22 @@
                                         <textarea name="Observacion" class="form-control form-control-sm"></textarea>
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-4 ocultar">
                                     <div class="form-group">
                                         <label>Ubicación Auxiliar</label>
-                                        <input type="text" name="ubicacionAuxiliar" class="form-control form-control-sm">
+                                        <select name="ubicacionAuxiliar" class="form-control selectcount1" required style="width:100%">
+                                            <option></option>
+                                            @foreach (var ubicacion in ViewBag.ListaUbicacionAuxiliar)
+                                            {
+                                                <option value="@ubicacion["ubicacionAuxiliar"]">@ubicacion["ubicacionAuxiliar"]</option>
+                                            }
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <label>Estado <span class="text-danger">*</span></label>
-                                        <select name="idEstado" id="estado" class="form-control selectcount1"  required style="width:100%">
+                                        <select name="idEstado" id="estado" class="form-control selectcount1" required style="width:100%">
                                             <option></option>
                                             @foreach (var estado in ViewBag.ListaEstado)
                                             {
@@ -221,11 +227,14 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-2">
                                     <div class="form-group">
                                         <label>Conteo<span class="text-danger">*</span></label>
-                                        <input type="text" name="conteo" id="numero" class="form-control form-control-sm" required>
+                                        <input type="text" name="conteo" id="numero" class="form-control form-control-sm conteo" required>
                                     </div>
+                                </div>
+                                <div class="col-sm-2 text-center" id="mostrar">
+
                                 </div>
                                 <div class="col-sm-12" id="contenerimg">
                                     <div class="col-md-4 align-self-center">
@@ -244,12 +253,12 @@
                                         </div>
                                         <div class="col-sm-4 text-center">
                                             <div class="form-group">
-                                                <button type="button" class="btn  btn-sm btn-dark" data-toggle="modal" id="fueraderuta" data-target="#FueraRuta">Fuera de Ruta</button>
+                                                <button type="button" class="btn  btn-sm btn-dark" data-toggle="modal" id="fueraderuta" name="fueraruta" data-target="#FueraRuta">Fuera de Ruta</button>
                                             </div>
                                         </div>
                                         <div class="col-sm-5">
                                             <div class="form-group">
-                                                <input type="submit" value="Siguiente Inspección" class="btn btn-sm btn-danger" style="background-color:#01abe8;border-color:#01abe8">
+                                                <input type="submit" value="Siguiente Inspección" class="btn btn-sm btn-danger" style="background-color:#01abe8;border-color:#01abe8" name="fueraruta">
                                             </div>
                                         </div>
                                     </div>
@@ -272,47 +281,120 @@
                 <div class="col-sm-12">
                     <div class="row">
                         <div class="card-body p-0">
-                            <div class="table-responsive">
-                                <table class="table table-striped filtros">
-                                    <thead>
-                                        <tr style="background-color:#434343; color:white;">
-                                            <th class="text-center" style="width:200px">Producto</th>
-                                            <th class="text-center" style="width:200px">Ubicación</th>
-                                            <th class="text-center" style="width:200px">Fecha Inventario</th>
-                                            <th class="text-center" style="width:200px">Operario Asignado</th>
-                                            <th class="text-center" style="width:200px">Estado</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var ruta in ViewBag.ListaRuta)
-                                        {
-                                            if (ruta["idProducto"] == @ViewBag.producto["idProducto"])
-                                            {
-                                                <tr style="background-color: #81F7BE">
-                                                    <td class="text-center">@ruta["Descripcion"]</td>
-                                                    <td class="text-center">
-                                                        @ruta["NombreBodega"] - @ruta["Ubicacion"]
-                                                    </td>
-                                                    <td class="text-center">@ruta["FechaCreacion"].ToString("yyyy-MM-dd")</td>
-                                                    <td class="text-center">@ruta["Usuario"]</td>
-                                                    <td class="text-center">@ruta["EstadoInspeccion"]</td>
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="InventarioTotal-tab" data-toggle="tab" href="#InventarioTotal" role="tab" aria-controls="InventarioTotal" aria-selected="true">Inventario Total</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="InventarioContado-tab" data-toggle="tab" href="#InventarioContado" role="tab" aria-controls="InventarioContado" aria-selected="false">Inventario Contado</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="InventarioSinContar-tab" data-toggle="tab" href="#InventarioSinContar" role="tab" aria-controls="InventarioSinContar" aria-selected="false">Inventario Sin Contar</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content tab-bordered" id="myTabContent">
+                                <div class="tab-pane fade show active" id="InventarioTotal" role="tabpanel" aria-labelledby="InventarioTotal-tab">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped filtros">
+                                            <thead>
+                                                <tr style="background-color:#434343; color:white;">
+                                                    <th class="text-center" style="width:200px">Producto</th>
+                                                    <th class="text-center" style="width:200px">Ubicación</th>
+                                                    <th class="text-center" style="width:200px">Fecha Inventario</th>
+                                                    <th class="text-center" style="width:200px">Operario Asignado</th>
+                                                    @*<th class="text-center" style="width:200px">Estado</th>*@
                                                 </tr>
-                                            }
-                                            else
-                                            {
-                                                <tr>
-                                                    <td class="text-center">@ruta["Descripcion"]</td>
-                                                    <td class="text-center">
-                                                        @ruta["NombreBodega"] - @ruta["Ubicacion"]
-                                                    </td>
-                                                    <td class="text-center">@ruta["FechaCreacion"].ToString("yyyy-MM-dd")</td>
-                                                    <td class="text-center">@ruta["Usuario"]</td>
-                                                    <td class="text-center">@ruta["EstadoInspeccion"]</td>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var ruta in ViewBag.ListaRuta)
+                                                {
+                                                    if (ruta["idProducto"] == @ViewBag.producto["idProducto"])
+                                                    {
+                                                        <tr style="background-color: #81F7BE">
+                                                            <td class="text-center">@ruta["Descripcion"]</td>
+                                                            <td class="text-center">
+                                                                @ruta["NombreBodega"] - @ruta["Ubicacion"]
+                                                            </td>
+                                                            <td class="text-center">@ruta["FechaCreacion"].ToString("yyyy-MM-dd")</td>
+                                                            <td class="text-center">@ruta["Usuario"]</td>
+                                                            @*<td class="text-center">@ruta["EstadoInspeccion"]</td>*@
+                                                        </tr>
+                                                    }
+                                                    else
+                                                    {
+                                                        <tr>
+                                                            <td class="text-center">@ruta["Descripcion"]</td>
+                                                            <td class="text-center">
+                                                                @ruta["NombreBodega"] - @ruta["Ubicacion"]
+                                                            </td>
+                                                            <td class="text-center">@ruta["FechaCreacion"].ToString("yyyy-MM-dd")</td>
+                                                            <td class="text-center">@ruta["Usuario"]</td>
+                                                            @*<td class="text-center">@ruta["EstadoInspeccion"]</td>*@
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="InventarioContado" role="tabpanel" aria-labelledby="InventarioContado-tab">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped filtros">
+                                            <thead>
+                                                <tr style="background-color:#434343; color:white;">
+                                                    <th class="text-center" style="width:200px">Producto</th>
+                                                    <th class="text-center" style="width:200px">Ubicación</th>
+                                                    <th class="text-center" style="width:200px">Fecha Inventario</th>
+                                                    <th class="text-center" style="width:200px">Operario Asignado</th>
+                                                    <th class="text-center" style="width:200px">Estado</th>
                                                 </tr>
-                                            }
-                                        }
-                                    </tbody>
-                                </table>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var rutaContadas in ViewBag.ListaRutaContadas)
+                                                {
+                                                    <tr>
+                                                        <td class="text-center">@rutaContadas["Descripcion"]</td>
+                                                        <td class="text-center">
+                                                            @rutaContadas["NombreBodega"] - @rutaContadas["Ubicacion"]
+                                                        </td>
+                                                        <td class="text-center">@rutaContadas["FechaCreacion"].ToString("yyyy-MM-dd")</td>
+                                                        <td class="text-center">@rutaContadas["Usuario"]</td>
+                                                        <td class="text-center">@rutaContadas["EstadoInspeccion"]</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="InventarioSinContar" role="tabpanel" aria-labelledby="InventarioSinContar-tab">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped filtros">
+                                            <thead>
+                                                <tr style="background-color:#434343; color:white;">
+                                                    <th class="text-center" style="width:200px">Producto</th>
+                                                    <th class="text-center" style="width:200px">Ubicación</th>
+                                                    <th class="text-center" style="width:200px">Fecha Inventario</th>
+                                                    <th class="text-center" style="width:200px">Operario Asignado</th>
+                                                    <th class="text-center" style="width:200px">Estado</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var rutaFaltantes in ViewBag.ListaRutaFaltantes)
+                                                {
+                                                    <tr>
+                                                        <td class="text-center">@rutaFaltantes["Descripcion"]</td>
+                                                        <td class="text-center">
+                                                            @rutaFaltantes["NombreBodega"] - @rutaFaltantes["Ubicacion"]
+                                                        </td>
+                                                        <td class="text-center">@rutaFaltantes["FechaCreacion"].ToString("yyyy-MM-dd")</td>
+                                                        <td class="text-center">@rutaFaltantes["Usuario"]</td>
+                                                        <td class="text-center">@rutaFaltantes["EstadoInspeccion"]</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -336,7 +418,7 @@
         })
         </script>
     }
-    <script type="text/javascript">
+<script type="text/javascript">
         $(".fijo").mask('000000000000000');
         $("#phonee").mask('(000) 000-0000');
         $(".selectcount").select2({
@@ -396,12 +478,37 @@
         $("#fueraderuta").on("click", function () {
             $('.1').hide();
             $('.2').show();
+            $('.ocultar').hide();
         });
         $(document).ready(function () {
             $('.1').show();
             $('.2').hide();
         });
-    </script>
+        $(".conteo").keyup(function () {
+             var asd = $('input:text[name=conteo]').val();
+             var htmls = "";
+            var color = "";
+            if (asd.length == 0) {
+                $("#mostrar").html("");
+            }
+            else {
+                $("#mostrar").html("");
+                if (asd == @ViewBag.producto["QTY"]) {
+                    color = "bg-success";
+                }
+                else if (asd < @ViewBag.producto["QTY"]) {
+                    color = "bg-danger";
+                 }
+             else if (asd > @ViewBag.producto["QTY"]){
+                    color = "bg-warning";
+                }
+                htmls += '<label class="d-lg-table-row">&nbsp;</label><a class="' + color +' btn btn-sm h-25 p-3 rounded-circle w-25 p-3"></a>';
+                $("#mostrar").append(htmls);
+            }
+
+            
+        });
+</script>
 }
 
 
