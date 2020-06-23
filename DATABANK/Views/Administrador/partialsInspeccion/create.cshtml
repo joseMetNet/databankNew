@@ -157,7 +157,13 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>Ubicación<span class="text-danger">*</span></label>
-                                        <input type="text" name="UbicacionP" class="form-control form-control-sm">
+                                        <select name="UbicacionP" class="form-control selectcount1" required style="width:100%">
+                                            <option></option>
+                                            @foreach (var ubicacion in ViewBag.ListaUbicacionAuxiliar)
+                                            {
+                                                <option value="@ubicacion["ubicacionAuxiliar"]">@ubicacion["ubicacionAuxiliar"]</option>
+                                            }
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-sm-12">
@@ -194,7 +200,7 @@
                                 <div class="col-sm-4 ocultar">
                                     <div class="form-group">
                                         <label>Ubicación Auxiliar</label>
-                                        <select name="ubicacionAuxiliar" class="form-control selectcount1" required style="width:100%">
+                                        <select name="ubicacionAuxiliar" class="form-control selectcount1 quitar" required style="width:100%">
                                             <option></option>
                                             @foreach (var ubicacion in ViewBag.ListaUbicacionAuxiliar)
                                             {
@@ -227,16 +233,16 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-2 ocultar">
                                     <div class="form-group">
                                         <label>Conteo<span class="text-danger">*</span></label>
-                                        <input type="text" name="conteo" id="numero" class="form-control form-control-sm conteo" required>
+                                        <input type="text" name="conteo" id="numero" class="form-control form-control-sm conteo quitar" required>
                                     </div>
                                 </div>
-                                <div class="col-sm-2 text-center" id="mostrar">
+                                <div class="col-sm-2 text-center ocultar" id="mostrar">
 
                                 </div>
-                                <div class="col-sm-12" id="contenerimg">
+                                <div class="col-sm-12 " id="contenerimg">
                                     <div class="col-md-4 align-self-center">
                                         <div class="wow fadeIn">
                                             <h5 id="addimagebutton" class="curpointer"><strong><i class="fa fa-plus"></i>Imagen</strong></h5>
@@ -479,6 +485,7 @@
             $('.1').hide();
             $('.2').show();
             $('.ocultar').hide();
+            $(".quitar").removeAttr("required");
         });
         $(document).ready(function () {
             $('.1').show();

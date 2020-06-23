@@ -954,18 +954,18 @@ namespace DATABANK.Controllers
                                         Centro = rows["CENTRO"].ToString();
                                     }
 
-                                    if (rows["UBICACION"].ToString() != "")
+                                    if (rows["UBICACIÓN"].ToString() != "")
                                     {
-                                        Ubicacion = rows["UBICACION"].ToString();
+                                        Ubicacion = rows["UBICACIÓN"].ToString();
                                     }
                                     else
                                     {
                                         Linea = variable;
                                         observacion = observacion + ", Campo UBICACIÓN vacio";
                                     }
-                                    if (rows["CODIGO"].ToString() != "")
+                                    if (rows["CÓDIGO"].ToString() != "")
                                     {
-                                        Codigo = rows["CODIGO"].ToString();
+                                        Codigo = rows["CÓDIGO"].ToString();
                                     }
                                     else
                                     {
@@ -993,9 +993,9 @@ namespace DATABANK.Controllers
                                         observacion = observacion + ", Campo UM vacio";
                                     }
 
-                                    if (rows["DESCRIPCION"].ToString() != "")
+                                    if (rows["DESCRIPCIÓN"].ToString() != "")
                                     {
-                                        Descripcion = rows["DESCRIPCION"].ToString();
+                                        Descripcion = rows["DESCRIPCIÓN"].ToString();
                                     }
                                     else
                                     {
