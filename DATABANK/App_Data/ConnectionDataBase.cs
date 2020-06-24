@@ -286,6 +286,7 @@ namespace DATABANK.App_Data
                     string sas = e.Message; throw;
                 }
             }
+            
             public DataTable getProyectoBodega(int pidProyecto = 0, int pidUsuario = 0)
             {
                 try
@@ -412,6 +413,26 @@ namespace DATABANK.App_Data
                     SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["CustomerDataConnectionString"].ConnectionString);
                     SqlDataAdapter da = new SqlDataAdapter("SP_getProducto", con);
                     da.SelectCommand.Parameters.Add("@pidProducto", SqlDbType.Int).Value = pidProducto;
+                    da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    return dt;
+
+                }
+                catch (Exception e)
+                {
+
+                    string sas = e.Message; throw;
+                }
+            }
+            public DataTable UpdateSemaforo(int pidInspeccion = 0, int semaforo = 0)
+            {
+                try
+                {
+                    SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["CustomerDataConnectionString"].ConnectionString);
+                    SqlDataAdapter da = new SqlDataAdapter("SP_UpdateSemaforo", con);
+                    da.SelectCommand.Parameters.Add("@pidInspeccion", SqlDbType.Int).Value = pidInspeccion;
+                    da.SelectCommand.Parameters.Add("@semaforo", SqlDbType.Int).Value = semaforo;
                     da.SelectCommand.CommandType = CommandType.StoredProcedure;
                     DataTable dt = new DataTable();
                     da.Fill(dt);
@@ -1249,6 +1270,44 @@ namespace DATABANK.App_Data
                     DataTable dt = new DataTable();
                     da.Fill(dt);
                     return dt;
+                }
+                catch (Exception e)
+                {
+
+                    string sas = e.Message; throw;
+                }
+            }
+            public DataTable getInventarioGrafica(int pidProyecto = 0)
+            {
+                try
+                {
+                    SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["CustomerDataConnectionString"].ConnectionString);
+                    SqlDataAdapter da = new SqlDataAdapter("[SP_InventarioGrafica]", con);
+                    da.SelectCommand.Parameters.Add("@pidProyecto", SqlDbType.Int).Value = pidProyecto;
+                    da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    return dt;
+                }
+                catch (Exception e)
+                {
+
+                    string sas = e.Message; throw;
+                }
+            }
+            
+            public DataTable getDataBodegaProyecto(int pidProyecto = 0)
+            {
+                try
+                {
+                    SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["CustomerDataConnectionString"].ConnectionString);
+                    SqlDataAdapter da = new SqlDataAdapter("SP_getBodegaProyecto", con);
+                    da.SelectCommand.Parameters.Add("@pidProyecto", SqlDbType.Int).Value = pidProyecto;
+                    da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    return dt;
+
                 }
                 catch (Exception e)
                 {

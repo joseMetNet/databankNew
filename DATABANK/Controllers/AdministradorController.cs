@@ -37,17 +37,23 @@ namespace DATABANK.Controllers
             ConnectionDataBase.StoreProcediur data = new ConnectionDataBase.StoreProcediur();
             return View("/Views/administrador/partialsReportes/Reporte1.cshtml");
         }
-        public ActionResult ReporteProyecto()
+        public ActionResult ReporteProyecto(int idProyecto = 0)
         {
             Session["alve"] = "dash";
             if (Convert.ToInt32(Session["idUsuario"]) <= 0)
             {
                 return RedirectToAction("Logout");
             }
-
             ConnectionDataBase.StoreProcediur data = new ConnectionDataBase.StoreProcediur();
             DataTable dt = data.getDataProyecto();
             ViewBag.ListaProyecto = dt.Rows;
+
+            dt = data.getDataBodegaProyecto(idProyecto);
+            ViewBag.ListaBodega = dt.Rows;
+
+            dt = data.getInventarioGrafica(idProyecto);
+            ViewBag.InventarioGrafica = dt.Rows;
+
             return View("/Views/administrador/partialsReportes/ReporteProyecto.cshtml");
         }
         public ActionResult Logout()
@@ -1245,7 +1251,7 @@ namespace DATABANK.Controllers
             }
 
         }
-        
+
         public ActionResult saveInspeccion(Models.Inspeccion model, int idProyecto = 0)
         {
             Session["alve"] = "config";
@@ -1254,13 +1260,14 @@ namespace DATABANK.Controllers
             int idUsuario = Convert.ToInt32(Session["idUsuario"]);
             if (model.idBodegaP != 0)
             {
-                nn = data.saveProducto(idProyecto,model.idBodegaP,model.UbicacionP,model.codigoP, model.idUnidadMedidaP
-                    ,model.descripcionP,model.cantidadP,idUsuario);
+                nn = data.saveProducto(idProyecto, model.idBodegaP, model.UbicacionP, model.codigoP, model.idUnidadMedidaP
+                    , model.descripcionP, model.cantidadP, idUsuario);
                 if (nn.Rows.Count > 0)
                 {
-                    if(nn.Rows[0]["respuesta"].ToString() != "0")
+                    if (nn.Rows[0]["respuesta"].ToString() != "0")
                     {
                         model.idProducto = Convert.ToInt32(nn.Rows[0]["idProducto"]);
+                        model.Conteo = nn.Rows[0]["QTY"].ToString();
                     }
                     else
                     {
@@ -1272,8 +1279,24 @@ namespace DATABANK.Controllers
                     }
                 }
             }
+            
             int idOperario = Convert.ToInt32(Session["idUsuario"]);
-            DataTable dt = data.saveInspeccion(model,idProyecto, idOperario);
+            DataTable dt = data.saveInspeccion(model, idProyecto, idOperario);
+            DataTable dd = data.getDataProducto(model.idProducto);
+            int semaforo = 0;
+            if (Convert.ToInt32(dd.Rows[0]["QTY"]) == Convert.ToInt32(dt.Rows[0]["CONTEO"]))
+            {
+                semaforo = 1;
+            }
+            if(Convert.ToInt32(dd.Rows[0]["QTY"]) > Convert.ToInt32(dt.Rows[0]["CONTEO"]))
+            {
+                semaforo = 2;
+            }
+            if (Convert.ToInt32(dd.Rows[0]["QTY"]) < Convert.ToInt32(dt.Rows[0]["CONTEO"]))
+            {
+                semaforo = 3;
+            }
+            DataTable A = data.UpdateSemaforo(Convert.ToInt32(dt.Rows[0]["idInspeccion"]),semaforo);
             DataTable dm = data.ActualizarEstadoTemporal(model.idProducto, idUsuario,6, Convert.ToInt32(model.Conteo));
             DataRow row = dt.Rows[0];
             var nomaas = Request.Files;
