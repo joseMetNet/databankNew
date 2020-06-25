@@ -26,32 +26,104 @@ namespace DATABANK.Controllers
             ConnectionDataBase.StoreProcediur data = new ConnectionDataBase.StoreProcediur();
             return View("/Views/administrador/Dashboard.cshtml");
         }
-        public ActionResult Reportes()
+        public ActionResult ReporteOperario(Models.Reportes model)
         {
-            Session["alve"] = "dash";
-            if (Convert.ToInt32(Session["idUsuario"]) <= 0)
-            {
-                return RedirectToAction("Logout");
-            }
-
             ConnectionDataBase.StoreProcediur data = new ConnectionDataBase.StoreProcediur();
-            return View("/Views/administrador/partialsReportes/Reporte1.cshtml");
-        }
-        public ActionResult ReporteProyecto(int idProyecto = 0)
-        {
-            Session["alve"] = "dash";
-            if (Convert.ToInt32(Session["idUsuario"]) <= 0)
+            DateTime FechaDesde = DateTime.Now;
+            DateTime FechaHasta = DateTime.Now;
+            String anioDesde = null;
+            String mesDesde = null;
+            String diaDesde = null;
+            String anioHasta = null;
+            String mesHasta = null;
+            String diaHasta = null;
+            if (model.FechaDesde != null)
             {
-                return RedirectToAction("Logout");
+                FechaDesde = (Convert.ToDateTime(model.FechaDesde.ToString()));
+                anioDesde = FechaDesde.Year.ToString();
+                mesDesde = FechaDesde.Month.ToString();
+                diaDesde = FechaDesde.Day.ToString();
             }
-            ConnectionDataBase.StoreProcediur data = new ConnectionDataBase.StoreProcediur();
+            else
+            {
+                anioDesde = null;
+                mesDesde = null;
+                diaDesde = null;
+            }
+            if (model.FechaHasta != null)
+            {
+                FechaHasta = (Convert.ToDateTime(model.FechaHasta.ToString()));
+                anioHasta = FechaHasta.Year.ToString();
+                mesHasta = FechaHasta.Month.ToString();
+                diaHasta = FechaHasta.Day.ToString();
+            }
+            else
+            {
+                anioHasta = null;
+                mesHasta = null;
+                diaHasta = null;
+            }
             DataTable dt = data.getDataProyecto();
             ViewBag.ListaProyecto = dt.Rows;
 
-            dt = data.getDataBodegaProyecto(idProyecto);
-            ViewBag.ListaBodega = dt.Rows;
+            dt = data.getLineasOperario(model.idProyecto, anioDesde, mesDesde, diaDesde, anioHasta, mesHasta, diaHasta);
+            ViewBag.LineasOperario = dt.Rows;
+            if(dt.Rows.Count == 0)
+            {
+                TempData["type"] = "error";
+                TempData["title"] = "Error";
+                TempData["message"] = "No se encontraron datos para las fechas seleccionadas";
+                RedirectToAction("ReporteOperario");
+            }
+            return View("/Views/administrador/partialsReportes/ReporteOperario.cshtml");
+        }
+        public ActionResult ReporteProyecto(Models.Reportes model)
+        {
+            Session["alve"] = "dash";
+            if (Convert.ToInt32(Session["idUsuario"]) <= 0)
+            {
+                return RedirectToAction("Logout");
+            }
+            ConnectionDataBase.StoreProcediur data = new ConnectionDataBase.StoreProcediur();
+            DateTime FechaDesde = DateTime.Now;
+            DateTime FechaHasta = DateTime.Now;
+            String anioDesde = null;
+            String mesDesde = null;
+            String diaDesde = null;
+            String anioHasta = null;
+            String mesHasta = null;
+            String diaHasta = null;
 
-            dt = data.getInventarioGrafica(idProyecto);
+            DataTable dt = data.getDataProyecto();
+            ViewBag.ListaProyecto = dt.Rows;
+           
+            if (model.FechaDesde != null)
+            {
+                FechaDesde = (Convert.ToDateTime(model.FechaDesde.ToString()));
+                anioDesde = FechaDesde.Year.ToString();
+                mesDesde = FechaDesde.Month.ToString();
+                diaDesde = FechaDesde.Day.ToString();
+            }
+            else
+            {
+                anioDesde = null;
+                mesDesde = null;
+                diaDesde = null;
+            }
+            if (model.FechaHasta != null)
+            {
+                FechaHasta = (Convert.ToDateTime(model.FechaHasta.ToString()));
+                anioHasta = FechaHasta.Year.ToString();
+                mesHasta = FechaHasta.Month.ToString();
+                diaHasta = FechaHasta.Day.ToString();
+            }
+            else
+            {
+                anioHasta = null;
+                mesHasta = null;
+                diaHasta = null;
+            }
+            dt = data.getInventarioGrafica(model.idProyecto,anioDesde, mesDesde, diaDesde, anioHasta, mesHasta, diaHasta);
             ViewBag.InventarioGrafica = dt.Rows;
 
             return View("/Views/administrador/partialsReportes/ReporteProyecto.cshtml");

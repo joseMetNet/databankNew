@@ -1,4 +1,4 @@
-﻿@model DATABANK.Models.Proyecto
+﻿@model DATABANK.Models.Reportes
 @{
     ViewBag.Title = "Dashboard";
     Layout = "~/Views/Shared/gestionView.cshtml";
@@ -22,6 +22,14 @@
                             <option value="@proyecto["idProyecto"]">@proyecto["NombreProyecto"]</option>
                         }
                     </select>
+                </div>
+                <div class="col-sm-3">
+                    <label><b>Fecha inicial:</b></label>
+                    <input type="text" id="FechaDesde" name="FechaDesde" class="form-control datepicker form-control-sm" />
+                </div>
+                <div class="col-sm-3">
+                    <label><b>Fecha final:</b></label>
+                    <input type="text" id="FechaHasta" name="FechaHasta" class="form-control datepicker form-control-sm" />
                 </div>
                 <div class="text-center">
                     <label class="" d-block><b>&nbsp;</b></label>
@@ -64,6 +72,12 @@
         @TempData.Remove("message");
     }
     <script>
+        $(".datepicker").flatpickr({
+            dateFormat: "Y-m-d",
+            "locale": "es",
+            //enableTime: false,
+            //minDate:new Date()
+        });
         $(".selectcount").select2({
             placeholder: "Seleccionar",
             allowClear: true
@@ -88,20 +102,17 @@
                             label: 'OK',
                             data: [@row["OK"]],
                             borderWidth: 1,
-                            backgroundColor: '#008000',
-                            borderColor: '#008000',
-                            //borderWidth: 2.5,
-                            pointBackgroundColor: '#ffffff',
+                            backgroundColor: '#04B431',
+                            borderColor: '#04B431',
                             pointRadius: 2
                         }),
                         OK.push({
                             label: 'SOBRANTES',
                             data: [@row["SOBRANTES"]],
                             borderWidth: 1,
-                            backgroundColor: '#ffff00',
-                            borderColor: '#ffff00',
+                            backgroundColor: '#FACC2E',
+                            borderColor: '#FACC2E',
                             //borderWidth: 2.5,
-                            pointBackgroundColor: '#ffffff',
                             pointRadius: 2
                         }),
                         OK.push({
@@ -110,13 +121,11 @@
                             borderWidth: 1,
                             backgroundColor: '#ff0000',
                             borderColor: '#ff0000',
-                            //borderWidth: 2.5,
-                            pointBackgroundColor: '#ffffff',
                             pointRadius: 2
                         })
         </script>
     }
-   
+
 
     <script type="text/javascript">
 
@@ -129,26 +138,24 @@
             },
             options: {
                 legend: {
-                    display: false
+                    display: true
                 },
                 scales: {
                     xAxes: [{
                         display: true,
                         scaleLabel: {
                             display: true
-                            //labelString: 'Bodegas'
                         }
                     }],
                     yAxes: [{
                         display: true,
                         scaleLabel: {
                             display: true
-                            //labelString: 'Cantidad'
                         }
                     }]
                 }
             }
         });
-</script>
+    </script>
 
 }

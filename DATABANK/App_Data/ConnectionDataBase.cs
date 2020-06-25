@@ -286,7 +286,7 @@ namespace DATABANK.App_Data
                     string sas = e.Message; throw;
                 }
             }
-            
+
             public DataTable getProyectoBodega(int pidProyecto = 0, int pidUsuario = 0)
             {
                 try
@@ -526,8 +526,8 @@ namespace DATABANK.App_Data
                     string sas = e.Message; throw;
                 }
             }
-            public DataTable saveProducto(int pidProyecto,int pidBodega, string pUbicacion,string pCodigo,int pidUnidadMedida
-                ,string pDescripcion, int pCantidad, int pidOperario)
+            public DataTable saveProducto(int pidProyecto, int pidBodega, string pUbicacion, string pCodigo, int pidUnidadMedida
+                , string pDescripcion, int pCantidad, int pidOperario)
             {
                 try
                 {
@@ -1277,13 +1277,20 @@ namespace DATABANK.App_Data
                     string sas = e.Message; throw;
                 }
             }
-            public DataTable getInventarioGrafica(int pidProyecto = 0)
+            public DataTable getInventarioGrafica(int pidProyecto, string anioDesde, string mesDesde, string diaDesde,
+                string anioHasta, string mesHasta, string diaHasta)
             {
                 try
                 {
                     SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["CustomerDataConnectionString"].ConnectionString);
                     SqlDataAdapter da = new SqlDataAdapter("[SP_InventarioGrafica]", con);
                     da.SelectCommand.Parameters.Add("@pidProyecto", SqlDbType.Int).Value = pidProyecto;
+                    if (anioDesde != null) da.SelectCommand.Parameters.Add("@anioDesde", SqlDbType.VarChar).Value = anioDesde;
+                    if (mesDesde != null) da.SelectCommand.Parameters.Add("@mesDesde", SqlDbType.VarChar).Value = mesDesde;
+                    if (diaDesde != null) da.SelectCommand.Parameters.Add("@diaDesde", SqlDbType.VarChar).Value = diaDesde;
+                    if (anioHasta != null) da.SelectCommand.Parameters.Add("@anioHasta", SqlDbType.VarChar).Value = anioHasta;
+                    if (mesHasta != null) da.SelectCommand.Parameters.Add("@mesHasta", SqlDbType.VarChar).Value = mesHasta;
+                    if (diaDesde != null) da.SelectCommand.Parameters.Add("@diaHasta", SqlDbType.VarChar).Value = diaHasta;
                     da.SelectCommand.CommandType = CommandType.StoredProcedure;
                     DataTable dt = new DataTable();
                     da.Fill(dt);
@@ -1295,7 +1302,32 @@ namespace DATABANK.App_Data
                     string sas = e.Message; throw;
                 }
             }
-            
+            public DataTable getLineasOperario(int pidProyecto, string anioDesde, string mesDesde, string diaDesde,
+                string anioHasta, string mesHasta, string diaHasta)
+            {
+                try
+                {
+                    SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["CustomerDataConnectionString"].ConnectionString);
+                    SqlDataAdapter da = new SqlDataAdapter("[SP_LineasOperario]", con);
+                    da.SelectCommand.Parameters.Add("@pidProyecto", SqlDbType.Int).Value = pidProyecto;
+                    if (anioDesde != null) da.SelectCommand.Parameters.Add("@anioDesde", SqlDbType.VarChar).Value = anioDesde;
+                    if (mesDesde != null) da.SelectCommand.Parameters.Add("@mesDesde", SqlDbType.VarChar).Value = mesDesde;
+                    if (diaDesde != null) da.SelectCommand.Parameters.Add("@diaDesde", SqlDbType.VarChar).Value = diaDesde;
+                    if (anioHasta != null) da.SelectCommand.Parameters.Add("@anioHasta", SqlDbType.VarChar).Value = anioHasta;
+                    if (mesHasta != null) da.SelectCommand.Parameters.Add("@mesHasta", SqlDbType.VarChar).Value = mesHasta;
+                    if (diaDesde != null) da.SelectCommand.Parameters.Add("@diaHasta", SqlDbType.VarChar).Value = diaHasta;
+                    da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    return dt;
+                }
+                catch (Exception e)
+                {
+
+                    string sas = e.Message; throw;
+                }
+            }
+
             public DataTable getDataBodegaProyecto(int pidProyecto = 0)
             {
                 try

@@ -3592,7 +3592,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\forgotYourPassword.cshtml" />
     <Content Include="Views\Home\actualizarContrasena.cshtml" />
-    <Content Include="Views\Administrador\partialsReportes\Reporte1.cshtml" />
+    <Content Include="Views\Administrador\partialsReportes\ReporteOperario.cshtml" />
     <Content Include="Views\Shared\gestionView.cshtml" />
     <Content Include="Views\Administrador\partialsUsuario\create.cshtml" />
     <Content Include="Views\Administrador\partialsUsuario\edit.cshtml" />

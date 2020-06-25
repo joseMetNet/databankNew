@@ -1,4 +1,4 @@
-﻿@model DATABANK.Models.Proyecto
+﻿@model DATABANK.Models.Reportes
 @{
     ViewBag.Title = "Dashboard";
     Layout = "~/Views/Shared/gestionView.cshtml";
@@ -6,12 +6,12 @@
 
 <section class="section">
     <h5 class="section-header">
-        Reporte Por Proyecto
+        Reporte Operario
     </h5>
 </section>
 <div class="card">
     <div class="card-body">
-        <form id="asda" action="@Url.Action("ReporteProyecto")" method="get">
+        <form id="asda" action="@Url.Action("ReporteOperario")" method="get">
             <div class="row">
                 <div class="col-sm-3">
                     <label>Proyecto <span class="text-danger">*</span></label>
@@ -22,6 +22,14 @@
                             <option value="@proyecto["idProyecto"]">@proyecto["NombreProyecto"]</option>
                         }
                     </select>
+                </div>
+                <div class="col-sm-3">
+                    <label><b>Fecha inicial:</b></label>
+                    <input type="text" id="FechaDesde" name="FechaDesde" class="form-control datepicker form-control-sm" />
+                </div>
+                <div class="col-sm-3">
+                    <label><b>Fecha final:</b></label>
+                    <input type="text" id="FechaHasta" name="FechaHasta" class="form-control datepicker form-control-sm" />
                 </div>
                 <div class="text-center">
                     <label class="" d-block><b>&nbsp;</b></label>
@@ -37,7 +45,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Conteos Detallado Por Bodegas</h4>
+                        <h4>Lineas Contadas Ope X Día</h4>
                     </div>
                     <div class="card-body">
                         <canvas id="myChart2"></canvas>
@@ -47,7 +55,6 @@
         </div>
     </div>
 </div>
-
 @section scripts{
 
     @if (TempData["message"] != null)
@@ -64,68 +71,51 @@
         @TempData.Remove("message");
     }
     <script>
+        $(".datepicker").flatpickr({
+            dateFormat: "Y-m-d",
+            "locale": "es",
+            //enableTime: false,
+            //minDate:new Date()
+        });
         $(".selectcount").select2({
             placeholder: "Seleccionar",
             allowClear: true
         })
     </script>
     <script type="text/javascript">
-        var Bodegas = new Array();
-        var OK = new Array();
+        var Operarios = new Array();
+        var Cantidad = new Array();
     </script>
-    @foreach (var row in ViewBag.InventarioGrafica)
+    @foreach (var row in ViewBag.LineasOperario)
     {
         <script type="text/javascript">
-            Bodegas.push(
-                '@row["NombreBodega"]',
+            Operarios.push(
+                '@row["Codigo"]',
             )
         </script>
     }
-    @foreach (var row in ViewBag.InventarioGrafica)
+    @foreach (var row in ViewBag.LineasOperario)
     {
         <script type="text/javascript">
-                        OK.push({
-                            label: 'OK',
-                            data: [@row["OK"]],
-                            borderWidth: 1,
-                            backgroundColor: '#008000',
-                            borderColor: '#008000',
-                            //borderWidth: 2.5,
-                            pointBackgroundColor: '#ffffff',
-                            pointRadius: 2
-                        }),
-                        OK.push({
-                            label: 'SOBRANTES',
-                            data: [@row["SOBRANTES"]],
-                            borderWidth: 1,
-                            backgroundColor: '#ffff00',
-                            borderColor: '#ffff00',
-                            //borderWidth: 2.5,
-                            pointBackgroundColor: '#ffffff',
-                            pointRadius: 2
-                        }),
-                        OK.push({
-                            label: 'FALTANTES',
-                            data: [@row["FALTANTES"]],
-                            borderWidth: 1,
-                            backgroundColor: '#ff0000',
-                            borderColor: '#ff0000',
-                            //borderWidth: 2.5,
-                            pointBackgroundColor: '#ffffff',
-                            pointRadius: 2
-                        })
+            Cantidad.push({
+                label: 'OK',
+                data: [@row["CONTEO"]],
+                borderWidth: 1,
+                backgroundColor: '#01abe8',
+                borderColor: '#01abe8',
+                pointBackgroundColor: '#ffffff',
+                pointRadius: 2
+            })
         </script>
     }
-   
-
     <script type="text/javascript">
 
         var ctx = document.getElementById("myChart2").getContext('2d');
         var myChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: Bodegas,
-                datasets: OK
+                labels: Operarios,
+                datasets: Cantidad
             },
             options: {
                 legend: {
@@ -136,19 +126,18 @@
                         display: true,
                         scaleLabel: {
                             display: true
-                            //labelString: 'Bodegas'
                         }
                     }],
                     yAxes: [{
                         display: true,
                         scaleLabel: {
                             display: true
-                            //labelString: 'Cantidad'
                         }
                     }]
                 }
             }
         });
-</script>
+    </script>
+
 
 }

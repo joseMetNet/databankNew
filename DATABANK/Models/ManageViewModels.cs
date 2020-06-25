@@ -20,7 +20,12 @@ namespace DATABANK.Models
     {
         public string email { get; set; }
     }
-
+    public class Reportes
+    {
+        public int idProyecto { get; set; }
+        public string FechaDesde { get; set; }
+        public string FechaHasta { get; set; }
+    }
     public class usuarios
     {
         public int idUsuario { get; set; }
