@@ -6,12 +6,12 @@
 
 <section class="section">
     <h5 class="section-header">
-        Reporte Por Proyecto
+        Reporte Conteos Diarios
     </h5>
 </section>
 <div class="card">
     <div class="card-body">
-        <form id="asda" action="@Url.Action("ReporteProyecto")" method="get">
+        <form id="asda" action="@Url.Action("ReporteConteosDiarios")" method="get">
             <div class="row">
                 <div class="col-sm-3">
                     <label>Proyecto <span class="text-danger">*</span></label>
@@ -45,7 +45,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Conteos Detallado Por Bodegas</h4>
+                        <h4>Conteos Diarios</h4>
                     </div>
                     <div class="card-body">
                         <canvas id="myChart2"></canvas>
@@ -84,18 +84,18 @@
         })
     </script>
     <script type="text/javascript">
-        var Bodegas = new Array();
+        var Fecha = new Array();
         var OK = new Array();
     </script>
-    @foreach (var row in ViewBag.InventarioGrafica)
+    @foreach (var row in ViewBag.ConteosDiarios)
     {
         <script type="text/javascript">
-            Bodegas.push(
-                '@row["NombreBodega"]',
+            Fecha.push(
+                '@row["FECHAINSPECCION"].ToString("yyyy-MM-dd")',
             )
         </script>
     }
-    @foreach (var row in ViewBag.InventarioGrafica)
+    @foreach (var row in ViewBag.ConteosDiarios)
     {
         <script type="text/javascript">
                         OK.push({
@@ -133,7 +133,7 @@
         var myChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: Bodegas,
+                labels: Fecha,
                 datasets: OK
             },
             options: {

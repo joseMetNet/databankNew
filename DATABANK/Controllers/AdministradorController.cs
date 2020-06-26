@@ -68,13 +68,17 @@ namespace DATABANK.Controllers
 
             dt = data.getLineasOperario(model.idProyecto, anioDesde, mesDesde, diaDesde, anioHasta, mesHasta, diaHasta);
             ViewBag.LineasOperario = dt.Rows;
-            if(dt.Rows.Count == 0)
+            if(model.idProyecto != 0)
             {
-                TempData["type"] = "error";
-                TempData["title"] = "Error";
-                TempData["message"] = "No se encontraron datos para las fechas seleccionadas";
-                RedirectToAction("ReporteOperario");
+                if (dt.Rows.Count == 0)
+                {
+                    TempData["type"] = "error";
+                    TempData["title"] = "Error";
+                    TempData["message"] = "No se encontraron datos para las fechas seleccionadas";
+                    RedirectToAction("ReporteOperario");
+                }
             }
+           
             return View("/Views/administrador/partialsReportes/ReporteOperario.cshtml");
         }
         public ActionResult ReporteProyecto(Models.Reportes model)
@@ -127,6 +131,57 @@ namespace DATABANK.Controllers
             ViewBag.InventarioGrafica = dt.Rows;
 
             return View("/Views/administrador/partialsReportes/ReporteProyecto.cshtml");
+        }
+        public ActionResult ReporteConteosDiarios(Models.Reportes model)
+        {
+            Session["alve"] = "dash";
+            if (Convert.ToInt32(Session["idUsuario"]) <= 0)
+            {
+                return RedirectToAction("Logout");
+            }
+            ConnectionDataBase.StoreProcediur data = new ConnectionDataBase.StoreProcediur();
+            DateTime FechaDesde = DateTime.Now;
+            DateTime FechaHasta = DateTime.Now;
+            String anioDesde = null;
+            String mesDesde = null;
+            String diaDesde = null;
+            String anioHasta = null;
+            String mesHasta = null;
+            String diaHasta = null;
+
+            DataTable dt = data.getDataProyecto();
+            ViewBag.ListaProyecto = dt.Rows;
+
+            if (model.FechaDesde != null)
+            {
+                FechaDesde = (Convert.ToDateTime(model.FechaDesde.ToString()));
+                anioDesde = FechaDesde.Year.ToString();
+                mesDesde = FechaDesde.Month.ToString();
+                diaDesde = FechaDesde.Day.ToString();
+            }
+            else
+            {
+                anioDesde = null;
+                mesDesde = null;
+                diaDesde = null;
+            }
+            if (model.FechaHasta != null)
+            {
+                FechaHasta = (Convert.ToDateTime(model.FechaHasta.ToString()));
+                anioHasta = FechaHasta.Year.ToString();
+                mesHasta = FechaHasta.Month.ToString();
+                diaHasta = FechaHasta.Day.ToString();
+            }
+            else
+            {
+                anioHasta = null;
+                mesHasta = null;
+                diaHasta = null;
+            }
+            dt = data.getConteosDiarios(model.idProyecto, anioDesde, mesDesde, diaDesde, anioHasta, mesHasta, diaHasta);
+            ViewBag.ConteosDiarios = dt.Rows;
+
+            return View("/Views/administrador/partialsReportes/ReporteConteosDiarios.cshtml");
         }
         public ActionResult Logout()
         {
@@ -609,6 +664,8 @@ namespace DATABANK.Controllers
             ViewBag.ListaUsuario = dt.Rows;
             dt = data.ObtenerData("SP_getSucursal");
             ViewBag.ListaSucursal = dt.Rows;
+            dt = data.ObtenerData("SP_getSemaforo");
+            ViewBag.ListaSemaforo = dt.Rows;
             dt = data.getDataDepartamento();
             ViewBag.ListaDepartamento = dt.Rows;
             return View("/Views/administrador/partialsProyecto/create.cshtml");
@@ -678,6 +735,8 @@ namespace DATABANK.Controllers
             ViewBag.ListaCliente = dt.Rows;
             dt = data.ObtenerData("SP_getSucursal");
             ViewBag.ListaSucursal = dt.Rows;
+            dt = data.ObtenerData("SP_getSemaforo");
+            ViewBag.ListaSemaforo = dt.Rows;
             dt = data.getDataDepartamento();
             ViewBag.ListaDepartamento = dt.Rows;
             return View("/Views/administrador/partialsProyecto/edit.cshtml");
@@ -1211,7 +1270,11 @@ namespace DATABANK.Controllers
             {
                 Console.WriteLine(ex.Message);
 
-                throw new System.ArgumentOutOfRangeException("index parameter is out of range.", ex);
+                //throw new System.ArgumentOutOfRangeException("index parameter is out of range.", ex);
+                TempData["message"] = "La plantilla no cuenta con el formato correcto, intente de nuevo";
+                TempData["title"] = "Error.";
+                TempData["type"] = "error";
+                return RedirectToAction("CargarInfo");
             }
             return RedirectToAction("MostraInfo", new {@id = model.idProyecto});
         }
@@ -1415,6 +1478,7 @@ namespace DATABANK.Controllers
                 return RedirectToAction("Index", "Home");
 
             ConnectionDataBase.StoreProcediur data = new ConnectionDataBase.StoreProcediur();
+
             DataTable dt = data.getInspeccion(0,idProyecto);
             ViewBag.inspeccion = dt.Rows;
             dt = data.getDataProyecto();

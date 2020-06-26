@@ -102,6 +102,18 @@
                                 <input type="text" name="telefono" required class="form-control form-control-sm">
                             </div>
                         </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Semáforo<span class="text-danger">*</span></label>
+                                <select name="Semaforo" class="form-control selectcount" required style="width:100%">
+                                    <option></option>
+                                    @foreach (var semaforo in ViewBag.ListaSemaforo)
+                                    {
+                                        <option value="@semaforo["Semaforo"]">@semaforo["Semaforo"]</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-sm-12 text-center">
                         <br><br>

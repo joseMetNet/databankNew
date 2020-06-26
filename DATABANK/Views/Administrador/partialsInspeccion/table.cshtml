@@ -53,17 +53,20 @@
                         {
                         <tr>
                             <td class="text-center">
-                                @if (inspeccion["Conteo"] == inspeccion["QTY"])
+                                @if (@inspeccion["Semaforo"].ToString() == "Si")
                                 {
-                                    <a data-href="#" class="btn btn-sm btn-success" style="width: 25px; height: 25px;-moz-border-radius: 50%; -webkit-border-radius: 50%;border-radius: 50%;" />
-                                }
-                                else if (inspeccion["Conteo"] < inspeccion["QTY"])
-                                {
-                                    <a data-href="#" class="btn btn-sm btn-danger" style="width: 25px; height: 25px;-moz-border-radius: 50%; -webkit-border-radius: 50%;border-radius: 50%;" />
-                                }
-                                else if (inspeccion["Conteo"] > inspeccion["QTY"])
-                                {
-                                    <a data-href="#" class="btn btn-sm btn-dark" style="width: 25px; height: 25px;-moz-border-radius: 50%; -webkit-border-radius: 50%;border-radius: 50%;background-color:#F7FE2E;border-color:#F7FE2E" />
+                                    if (inspeccion["Conteo"] == inspeccion["QTY"])
+                                    {
+                                        <a data-href="#" class="btn btn-sm btn-success" style="width: 25px; height: 25px;-moz-border-radius: 50%; -webkit-border-radius: 50%;border-radius: 50%;" />
+                                    }
+                                    else if (inspeccion["Conteo"] < inspeccion["QTY"])
+                                    {
+                                        <a data-href="#" class="btn btn-sm btn-danger" style="width: 25px; height: 25px;-moz-border-radius: 50%; -webkit-border-radius: 50%;border-radius: 50%;" />
+                                    }
+                                    else if (inspeccion["Conteo"] > inspeccion["QTY"])
+                                    {
+                                        <a data-href="#" class="btn btn-sm btn-dark" style="width: 25px; height: 25px;-moz-border-radius: 50%; -webkit-border-radius: 50%;border-radius: 50%;background-color:#F7FE2E;border-color:#F7FE2E" />
+                                    }
                                 }
                             </td>
                             <td class="text-center">@inspeccion["NombreBodega"]</td>

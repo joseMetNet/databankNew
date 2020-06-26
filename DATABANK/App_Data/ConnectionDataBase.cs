@@ -897,6 +897,7 @@ namespace DATABANK.App_Data
                     da.SelectCommand.Parameters.Add("@pidEstado", SqlDbType.Int).Value = 1;
                     da.SelectCommand.Parameters.Add("@pidDepartamento", SqlDbType.Int).Value = model.idDepartamento;
                     da.SelectCommand.Parameters.Add("@pidMunicipio", SqlDbType.Int).Value = model.idMunicipio;
+                    da.SelectCommand.Parameters.Add("@pSemaforo", SqlDbType.VarChar).Value = model.Semaforo;
                     da.SelectCommand.CommandType = CommandType.StoredProcedure;
                     DataTable dt = new DataTable();
                     da.Fill(dt);
@@ -954,6 +955,7 @@ namespace DATABANK.App_Data
                     da.SelectCommand.Parameters.Add("@pidEstado", SqlDbType.Int).Value = model.idEstado;
                     da.SelectCommand.Parameters.Add("@pidDepartamento", SqlDbType.Int).Value = model.idDepartamento;
                     da.SelectCommand.Parameters.Add("@pidMunicipio", SqlDbType.Int).Value = model.idMunicipio;
+                    da.SelectCommand.Parameters.Add("@pSemaforo", SqlDbType.VarChar).Value = model.Semaforo;
                     da.SelectCommand.CommandType = CommandType.StoredProcedure;
                     DataTable dt = new DataTable();
                     da.Fill(dt);
@@ -1284,6 +1286,31 @@ namespace DATABANK.App_Data
                 {
                     SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["CustomerDataConnectionString"].ConnectionString);
                     SqlDataAdapter da = new SqlDataAdapter("[SP_InventarioGrafica]", con);
+                    da.SelectCommand.Parameters.Add("@pidProyecto", SqlDbType.Int).Value = pidProyecto;
+                    if (anioDesde != null) da.SelectCommand.Parameters.Add("@anioDesde", SqlDbType.VarChar).Value = anioDesde;
+                    if (mesDesde != null) da.SelectCommand.Parameters.Add("@mesDesde", SqlDbType.VarChar).Value = mesDesde;
+                    if (diaDesde != null) da.SelectCommand.Parameters.Add("@diaDesde", SqlDbType.VarChar).Value = diaDesde;
+                    if (anioHasta != null) da.SelectCommand.Parameters.Add("@anioHasta", SqlDbType.VarChar).Value = anioHasta;
+                    if (mesHasta != null) da.SelectCommand.Parameters.Add("@mesHasta", SqlDbType.VarChar).Value = mesHasta;
+                    if (diaDesde != null) da.SelectCommand.Parameters.Add("@diaHasta", SqlDbType.VarChar).Value = diaHasta;
+                    da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    return dt;
+                }
+                catch (Exception e)
+                {
+
+                    string sas = e.Message; throw;
+                }
+            }
+            public DataTable getConteosDiarios(int pidProyecto, string anioDesde, string mesDesde, string diaDesde,
+               string anioHasta, string mesHasta, string diaHasta)
+            {
+                try
+                {
+                    SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["CustomerDataConnectionString"].ConnectionString);
+                    SqlDataAdapter da = new SqlDataAdapter("[SP_getConteosDiarios]", con);
                     da.SelectCommand.Parameters.Add("@pidProyecto", SqlDbType.Int).Value = pidProyecto;
                     if (anioDesde != null) da.SelectCommand.Parameters.Add("@anioDesde", SqlDbType.VarChar).Value = anioDesde;
                     if (mesDesde != null) da.SelectCommand.Parameters.Add("@mesDesde", SqlDbType.VarChar).Value = mesDesde;

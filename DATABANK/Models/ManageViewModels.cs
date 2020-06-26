@@ -82,6 +82,7 @@ namespace DATABANK.Models
         public string Exportar { get; set; }
         public int idDepartamento { get; set; }
         public int idMunicipio { get; set; }
+        public string Semaforo { get; set; }
 
     }
     public class Producto

@@ -138,6 +138,25 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Semáforo<span class="text-danger">*</span></label>
+                                <select name="Semaforo" class="form-control selectcount" required style="width:100%">
+                                    <option></option>
+                                    @foreach (var semaforo in ViewBag.ListaSemaforo)
+                                    {
+                                        if (ViewBag.proyecto["Semaforo"].ToString() == semaforo["Semaforo"].ToString())
+                                        {
+                                            <option selected value="@semaforo["Semaforo"]">@semaforo["Semaforo"]</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@semaforo["Semaforo"]">@semaforo["Semaforo"]</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-sm-12 text-center">
                         <br><br>

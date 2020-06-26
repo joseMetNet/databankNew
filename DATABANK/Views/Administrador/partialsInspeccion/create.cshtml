@@ -200,7 +200,7 @@
                                 <div class="col-sm-4 ocultar">
                                     <div class="form-group">
                                         <label>Ubicación Auxiliar</label>
-                                        <select name="ubicacionAuxiliar" class="form-control selectcount1 quitar"  style="width:100%">
+                                        <select name="ubicacionAuxiliar" class="form-control selectcount1 quitar" style="width:100%">
                                             <option></option>
                                             @foreach (var ubicacion in ViewBag.ListaUbicacionAuxiliar)
                                             {
@@ -239,9 +239,12 @@
                                         <input type="text" name="conteo" id="numero" class="form-control form-control-sm conteo quitar" required>
                                     </div>
                                 </div>
-                                <div class="col-sm-2 text-center ocultar" id="mostrar">
+                                @if (@ViewBag.producto["Semaforo"].ToString() == "Si")
+                                {
+                                    <div class="col-sm-2 text-center ocultar" id="mostrar">
 
-                                </div>
+                                    </div>
+                                }
                                 <div class="col-sm-12 " id="contenerimg">
                                     <div class="col-md-4 align-self-center">
                                         <div class="wow fadeIn">
@@ -493,30 +496,28 @@
             $('.2').hide();
             $(".requerido").removeAttr("required");
         });
-        $(".conteo").keyup(function () {
-            var asd = $('input:text[name=conteo]').val();
-            var htmls = "";
-            var color = "";
-            if (asd.length == 0) {
-                $("#mostrar").html("");
+    $(".conteo").keyup(function () {
+        var asd = $('input:text[name=conteo]').val();
+        var htmls = "";
+        var color = "";
+        if (asd.length == 0) {
+            $("#mostrar").html("");
+        }
+        else {
+            $("#mostrar").html("");
+            if (asd == @ViewBag.producto["QTY"]) {
+                color = "bg-success";
             }
-            else {
-                $("#mostrar").html("");
-                if (asd == @ViewBag.producto["QTY"]) {
-                    color = "bg-success";
+            else if (asd < @ViewBag.producto["QTY"]) {
+                color = "bg-danger";
                 }
-                else if (asd < @ViewBag.producto["QTY"]) {
-                    color = "bg-danger";
-                 }
-             else if (asd > @ViewBag.producto["QTY"]){
-                    color = "bg-warning";
-                }
-                htmls += '<label class="d-lg-table-row">&nbsp;</label><a class="' + color +' btn btn-sm h-25 p-3 rounded-circle w-25 p-3"></a>';
-                $("#mostrar").append(htmls);
+            else if (asd > @ViewBag.producto["QTY"]){
+                color = "bg-warning";
             }
-
-            
-        });
+            htmls += '<label class="d-lg-table-row">&nbsp;</label><a class="' + color +' btn btn-sm h-25 p-3 rounded-circle w-25 p-3"></a>';
+            $("#mostrar").append(htmls);
+        } 
+    });
 </script>
 }
 

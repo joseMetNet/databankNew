@@ -82,11 +82,10 @@
                                     }
 
                                 }
-
                             </td>
                             <td class="text-center">
                                 @{
-                                    ViewBag.Variable1 = 0;
+                                    ViewBag.Variable2 = 0;
                                 }
                                 @if (ViewBag.LA.Count > 0)
                                 {
@@ -94,13 +93,13 @@
                                     {
                                         if (rowc["idProyecto"].ToString() == proyecto["idProyecto"].ToString())
                                         {
-                                            ViewBag.Variable1 = @rowc["LA"];
+                                            ViewBag.Variable2 = @rowc["LA"];
                                         }
                                     }
-                                    if (ViewBag.Variable1 != 0)
+                                    if (ViewBag.Variable2 != 0)
                                     {
                                         <a class="text-default font-weight-semibold text-uppercase">
-                                            @ViewBag.Variable1
+                                            @ViewBag.Variable2
                                         </a>
                                     }
                                     else
@@ -109,6 +108,12 @@
                                             0
                                         </a>
                                     }
+                                }
+                                else
+                                {
+                                    <a class="text-default font-weight-semibold text-uppercase">
+                                        0
+                                    </a>
                                 }
                             </td>
                             <td class="text-center">
@@ -136,6 +141,12 @@
                                             0
                                         </a>
                                     }
+                                }
+                                else
+                                {
+                                    <a class="text-default font-weight-semibold text-uppercase">
+                                        0
+                                    </a>
                                 }
                             </td>
                             <td class="text-center">
